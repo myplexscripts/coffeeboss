@@ -25,7 +25,7 @@ function cbxEventBrief(context){
     ? {latte:'The cups are lined up. Put your pour in front of the judges and see what it earns.',speed:'The orders are coming in. This round earns XP and restores some Energy.',crate:'A sealed delivery just arrived. Open it to reveal cash or a piece of gear.'}[context.type]
     : boss?'Every push reduces the remaining pressure. Your progress stays, even if you need a break between attempts.':'Your Service faces their Quality. Your Quality helps limit the Morale you lose. A loss can cost cash from the till.';
   modal.classList.remove('shift-modal','shift-resolving');
-  content.innerHTML=`<section class="event-brief"><span class="scene-kicker">BEFORE YOU BEGIN</span><h2>${title}</h2><p>${description}</p><p><strong>Cost:</strong> ${cost}</p><p>Rewards are calculated by the game. This is a result reveal, not a timing minigame.</p><div class="event-buttons"><button class="btn soft" data-event-back>Not yet</button><button class="btn primary" data-event-start>${context.type==='crate'?'Open the crate':'Start the challenge'}</button></div></section>`;
+  content.innerHTML=`<section class="event-brief"><span class="scene-kicker">BEFORE YOU BEGIN</span><h2>${title}</h2><p>${description}</p><p><strong>Cost:</strong> ${cost}</p><p>Once you start, your crew takes it from here.</p><div class="event-buttons"><button class="btn soft" data-event-back>Not yet</button><button class="btn primary" data-event-start>${context.type==='crate'?'Open the crate':'Start the challenge'}</button></div></section>`;
   modal.showModal();
   content.querySelector('[data-event-back]').onclick=()=>modal.close();
   content.querySelector('[data-event-start]').onclick=()=>{
@@ -163,7 +163,7 @@ function cbxMasteryLabel(value){
 }
 
 function cbxHomeObjective(){
-  if(state.jobsCompleted<3) return {icon:'coffee',label:'START HERE · 1 OF 4',title:'Serve your first three shifts',copy:`${state.jobsCompleted}/3 worked. Head to Shifts and choose Serve the Regulars. Repeatable shifts are small batches of work, not a new day each time.`,action:'shifts',button:'GO TO SHIFTS'};
+  if(state.jobsCompleted<3) return {icon:'coffee',label:'START HERE · 1 OF 4',title:'Serve your first three batches',copy:`${state.jobsCompleted}/3 served. Choose Serve the Regulars at the counter. Each batch earns cash and XP, and the shop stays open between batches.`,action:'shifts',button:'HEAD TO THE COUNTER'};
   if(!state.locationsBought) return {icon:'shopping-cart',label:'NEXT UP · 2 OF 4',title:'Open your first Coffee Cart',copy:'Save $450 from shifts, then open a Coffee Cart in Locations. It earns cash every minute, even while you are away.',action:state.cash>=450?'locations':'shifts',button:state.cash>=450?'OPEN A COFFEE CART':'EARN THE REST'};
   if(state.crew.length<2) return {icon:'user-plus',label:'NEXT UP · 3 OF 4',title:'Give Maya some backup',copy:'Recruit one person for $300. They add power and let you use more gear. Keep working shifts if you need the cash.',action:state.cash>=300?'crew':'shifts',button:state.cash>=300?'MEET YOUR NEXT HIRE':'WORK ANOTHER SHIFT'};
   if(state.rivalsBeaten+state.rivalLosses===0) return {icon:'swords',label:'TRY IT OUT · 4 OF 4',title:'Try a rival challenge',copy:'Visit Rivals and compare their strength with yours. Gear and skill upgrades help if they look too tough. Winning is not required to move on.',action:'rivals',button:'LOOK AT THE RIVALS'};
@@ -431,8 +431,10 @@ function cbxReportToken(iconName,label,value,tone=''){
 
 function cbxShowActionReport(report){
   if(!report) return false;
+  if(report.brief){cbxOriginalToast(`${report.title}. ${report.copy}`,'good');return true;}
   document.querySelector('.action-report-layer')?.remove();
-  const layer=document.createElement('div');
+  const returnFocus=document.activeElement;
+  const layer=document.createElement('dialog');
   layer.className=`action-report-layer ${report.tone||'good'} ${report.brief?'brief':''}`;
   layer.setAttribute('role','dialog');
   layer.setAttribute('aria-modal','true');
@@ -447,13 +449,13 @@ function cbxShowActionReport(report){
   </section>`;
   document.body.appendChild(layer);
   lucide.createIcons();
-  const close=()=>{layer.classList.add('closing');setTimeout(()=>layer.remove(),360);};
+  layer.showModal();
+  let closing=false;
+  const close=()=>{if(closing)return;closing=true;layer.classList.add('closing');setTimeout(()=>{layer.close();layer.remove();if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});},240);};
   layer.querySelector('.report-continue').onclick=close;
   layer.addEventListener('click',event=>{if(event.target===layer) close();});
-  const onKey=event=>{if(event.key==='Escape'){close();window.removeEventListener('keydown',onKey);}};
-  window.addEventListener('keydown',onKey,{once:true});
+  layer.addEventListener('cancel',event=>{event.preventDefault();close();});
   requestAnimationFrame(()=>{layer.classList.add('show');layer.querySelector('.report-continue').focus({preventScroll:true});});
-  if(report.brief) setTimeout(()=>{if(layer.isConnected) close();},3600);
   return true;
 }
 

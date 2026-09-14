@@ -101,5 +101,5 @@ showMoreMenu=function(){
   modal.querySelector('[data-game-options]').onclick=()=>{modal.close();showSettings();};
 };
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&!document.getElementById('modal').open&&currentPage!=='home')navigate('home');
+  if(e.key==='Escape'&&!document.querySelector('dialog[open]')&&currentPage!=='home')navigate('home');
 });

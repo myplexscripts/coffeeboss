@@ -71,6 +71,17 @@ button:focus-visible,[role=button]:focus-visible,summary:focus-visible{outline:3
 .workspace-body .route-stop{grid-template-columns:56px minmax(0,1fr) 140px;gap:16px;padding:20px}.workspace-body .route-stop>button{grid-column:2/-1;min-height:48px}.workspace-body .route-node{width:56px}.workspace-body .route-place h2{font-size:22px}
 .workspace-body button{max-width:100%;white-space:normal}.modal{max-width:min(640px,calc(100vw - 24px));max-height:calc(100dvh - 32px);overflow:auto}.event-brief{padding:24px}.event-brief h2{font-size:28px}.event-brief p{font-size:14px;line-height:1.65}
 @keyframes shop-steam{0%,100%{opacity:0;transform:translateY(0)}50%{opacity:.75;transform:translateY(-12px)}}
+.action-report-layer{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;border:0;color:var(--shop-paper)}
+.action-report-layer::backdrop{background:transparent}
+.action-report-layer .action-report{max-height:calc(100dvh - 40px);overflow:auto;min-height:0;background:#233d32;border:1px solid #c3a56a;border-radius:12px;clip-path:none}
+.workspace-body :is(.locker-heading,.mode-switch,.chapter-break){background:#21392f}
+.workspace-body .mode-switch .active{background:#415847;color:#ffe0a1;border-bottom-color:#d9b56e}
+.workspace-body .locker-heading span{color:#dec897}
+.workspace-body .locker-grid{background:transparent}
+.workspace-body .locker-slot>button{background:#355743;color:#f5dfb0}
+.workspace-body .locker-art{background:#aec7971a;color:#dfd6b4}
+.workspace-body .locker-slot::after{display:none}
+.workspace-body .locker-heading{display:flex;flex-wrap:wrap;gap:8px;padding:16px}
 @media(min-width:1500px){.shop-home{padding-top:24px}.shop-room{border-radius:16px 16px 0 0}}
 @media(max-width:700px){
   .status-strip.game-hud{padding:6px 4px;min-height:68px;gap:0}.game-hud .status-item{display:flex;flex-direction:column;padding:6px 2px 10px;gap:2px;text-align:center}.game-hud .status-item>svg{display:none}.game-hud .status-item strong{font-size:12px}.game-hud .status-item small{font-size:9px}.game-hud .resource-meter{left:12%;right:12%}
