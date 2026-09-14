@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#141210" />
+  <title>Coffee Boss</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" data-nav="home" aria-label="Coffee Boss home">
+        <span class="brand-mark"><i data-lucide="coffee"></i></span>
+        <span><strong>Coffee Boss</strong><small id="districtLabel">Old Market</small></span>
+      </button>
+      <div class="top-actions">
+        <button class="icon-button" id="saveButton" title="Save game"><i data-lucide="save"></i></button>
+        <button class="icon-button" id="settingsButton" title="Game options"><i data-lucide="settings-2"></i></button>
+      </div>
+    </header>
+
+    <section class="status-strip" aria-label="Player status">
+      <div class="status-item cash"><i data-lucide="banknote"></i><span><small>Cash</small><strong id="cashStat">$0</strong></span></div>
+      <div class="status-item"><i data-lucide="heart-pulse"></i><span><small>Morale</small><strong id="moraleStat">0/0</strong></span></div>
+      <div class="status-item"><i data-lucide="zap"></i><span><small>Energy</small><strong id="energyStat">0/0</strong></span></div>
+      <div class="status-item"><i data-lucide="flame"></i><span><small>Drive</small><strong id="driveStat">0/0</strong></span></div>
+      <div class="status-item xp-status"><i data-lucide="sparkles"></i><span><small>Level <b id="levelStat">1</b></small><strong id="xpStat">0 / 0 XP</strong></span><div class="mini-progress"><span id="xpBar"></span></div></div>
+    </section>
+
+    <div class="body-grid">
+      <nav class="sidebar" aria-label="Main navigation">
+        <button class="nav-item active" data-nav="home"><i data-lucide="house"></i><span>Home</span></button>
+        <button class="nav-item" data-nav="shifts"><i data-lucide="clipboard-list"></i><span>Shifts</span><b class="nav-badge" id="shiftBadge"></b></button>
+        <button class="nav-item" data-nav="rivals"><i data-lucide="swords"></i><span>Rivals</span></button>
+        <button class="nav-item" data-nav="locations"><i data-lucide="store"></i><span>Locations</span></button>
+        <button class="nav-item" data-nav="stockroom"><i data-lucide="package-open"></i><span>Stockroom</span></button>
+        <button class="nav-item" data-nav="crew"><i data-lucide="users"></i><span>Crew</span></button>
+        <button class="nav-item" data-nav="challenges"><i data-lucide="trophy"></i><span>Challenges</span><b class="nav-badge" id="challengeBadge"></b></button>
+        <button class="nav-item" data-nav="reserve"><i data-lucide="landmark"></i><span>Reserve</span></button>
+        <button class="nav-item" data-nav="breakroom"><i data-lucide="armchair"></i><span>Break Room</span></button>
+        <button class="nav-item" data-nav="profile"><i data-lucide="circle-user-round"></i><span>Boss</span><b class="nav-badge" id="skillBadge"></b></button>
+      </nav>
+
+      <main id="main" class="main-content" tabindex="-1"></main>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-nav="home"><i data-lucide="house"></i><span>Home</span></button>
+      <button class="mobile-nav-item" data-nav="shifts"><i data-lucide="clipboard-list"></i><span>Shifts</span></button>
+      <button class="mobile-nav-item" data-nav="rivals"><i data-lucide="swords"></i><span>Rivals</span></button>
+      <button class="mobile-nav-item" data-nav="locations"><i data-lucide="store"></i><span>Locations</span></button>
+      <button class="mobile-nav-item" data-nav="more"><i data-lucide="menu"></i><span>More</span></button>
+    </nav>
+  </div>
+
+  <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+
+  <dialog id="modal" class="modal">
+    <div id="modalContent"></div>
+  </dialog>
+
+  <script src="game.js"></script>
+</body>
+</html>
