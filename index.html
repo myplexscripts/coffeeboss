@@ -3,54 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#141210" />
+  <meta name="theme-color" content="#11100e" />
   <title>Coffee Boss</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="game-feel.css" />
+  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="game-feel.css?v=3" />
 </head>
 <body>
   <div class="app-shell">
-    <header class="topbar game-hud" aria-label="Coffee Boss HUD">
-      <div class="hud-brand">
-        <button class="brand" data-nav="home" aria-label="Coffee Boss home">
+    <div class="body-grid game-layout">
+      <aside class="sidebar game-rail" aria-label="Coffee Boss navigation">
+        <button class="brand rail-brand" data-nav="home" aria-label="Coffee Boss home">
           <span class="brand-mark"><i data-lucide="coffee"></i></span>
           <span><strong>Coffee Boss</strong><small id="districtLabel">Old Market</small></span>
         </button>
-      </div>
 
-      <section class="status-strip hud-resources" aria-label="Player resources">
-        <div class="status-item cash" id="cashHud"><i data-lucide="banknote"></i><span><small>Cash</small><strong id="cashStat">$0</strong></span></div>
-        <div class="status-item morale" id="moraleHud"><i data-lucide="heart-pulse"></i><span><small>Morale</small><strong id="moraleStat">0/0</strong></span></div>
-        <div class="status-item energy" id="energyHud"><i data-lucide="zap"></i><span><small>Energy</small><strong id="energyStat">0/0</strong></span></div>
-        <div class="status-item drive" id="driveHud"><i data-lucide="flame"></i><span><small>Drive</small><strong id="driveStat">0/0</strong></span></div>
-        <div class="status-item xp-status" id="xpHud"><i data-lucide="sparkles"></i><span><small>Level <b id="levelStat">1</b></small><strong id="xpStat">0 / 0 XP</strong></span><div class="mini-progress"><span id="xpBar"></span></div></div>
+        <nav class="rail-nav" aria-label="Main navigation">
+          <button class="nav-item active" data-nav="home"><i data-lucide="house"></i><span>Home</span></button>
+          <button class="nav-item" data-nav="shifts"><i data-lucide="clipboard-list"></i><span>Shifts</span><b class="nav-badge" id="shiftBadge"></b></button>
+          <button class="nav-item" data-nav="rivals"><i data-lucide="swords"></i><span>Rivals</span></button>
+          <button class="nav-item" data-nav="locations"><i data-lucide="store"></i><span>Locations</span></button>
+          <button class="nav-item" data-nav="stockroom"><i data-lucide="package-open"></i><span>Stockroom</span></button>
+          <button class="nav-item" data-nav="crew"><i data-lucide="users"></i><span>Crew</span></button>
+          <button class="nav-item" data-nav="challenges"><i data-lucide="trophy"></i><span>Challenges</span><b class="nav-badge" id="challengeBadge"></b></button>
+          <button class="nav-item" data-nav="reserve"><i data-lucide="landmark"></i><span>Reserve</span></button>
+          <button class="nav-item" data-nav="breakroom"><i data-lucide="armchair"></i><span>Break Room</span></button>
+          <button class="nav-item" data-nav="profile"><i data-lucide="circle-user-round"></i><span>Boss</span><b class="nav-badge" id="skillBadge"></b></button>
+        </nav>
+
+        <div class="rail-actions">
+          <button class="rail-action" id="saveButton" title="Save game"><i data-lucide="save"></i><span>Save</span></button>
+          <button class="rail-action" id="settingsButton" title="Game options"><i data-lucide="settings-2"></i><span>Options</span></button>
+        </div>
+      </aside>
+
+      <section class="playfield">
+        <section class="status-strip game-hud" aria-label="Player resources">
+          <div class="status-item cash" id="cashHud"><i data-lucide="banknote"></i><span><small>Cash</small><strong id="cashStat">$0</strong></span></div>
+          <div class="status-item morale" id="moraleHud"><i data-lucide="heart-pulse"></i><span><small>Morale</small><strong id="moraleStat">0/0</strong></span></div>
+          <div class="status-item energy" id="energyHud"><i data-lucide="zap"></i><span><small>Energy</small><strong id="energyStat">0/0</strong></span></div>
+          <div class="status-item drive" id="driveHud"><i data-lucide="flame"></i><span><small>Drive</small><strong id="driveStat">0/0</strong></span></div>
+          <div class="status-item xp-status" id="xpHud"><i data-lucide="sparkles"></i><span><small>Level <b id="levelStat">1</b></small><strong id="xpStat">0 / 0 XP</strong></span><div class="mini-progress"><span id="xpBar"></span></div></div>
+        </section>
+
+        <main id="main" class="main-content" tabindex="-1"></main>
       </section>
-
-      <div class="hud-actions">
-        <button class="icon-button" id="saveButton" title="Save game"><i data-lucide="save"></i></button>
-        <button class="icon-button" id="settingsButton" title="Game options"><i data-lucide="settings-2"></i></button>
-      </div>
-    </header>
-
-    <div class="body-grid">
-      <nav class="sidebar" aria-label="Main navigation">
-        <button class="nav-item active" data-nav="home"><i data-lucide="house"></i><span>Home</span></button>
-        <button class="nav-item" data-nav="shifts"><i data-lucide="clipboard-list"></i><span>Shifts</span><b class="nav-badge" id="shiftBadge"></b></button>
-        <button class="nav-item" data-nav="rivals"><i data-lucide="swords"></i><span>Rivals</span></button>
-        <button class="nav-item" data-nav="locations"><i data-lucide="store"></i><span>Locations</span></button>
-        <button class="nav-item" data-nav="stockroom"><i data-lucide="package-open"></i><span>Stockroom</span></button>
-        <button class="nav-item" data-nav="crew"><i data-lucide="users"></i><span>Crew</span></button>
-        <button class="nav-item" data-nav="challenges"><i data-lucide="trophy"></i><span>Challenges</span><b class="nav-badge" id="challengeBadge"></b></button>
-        <button class="nav-item" data-nav="reserve"><i data-lucide="landmark"></i><span>Reserve</span></button>
-        <button class="nav-item" data-nav="breakroom"><i data-lucide="armchair"></i><span>Break Room</span></button>
-        <button class="nav-item" data-nav="profile"><i data-lucide="circle-user-round"></i><span>Boss</span><b class="nav-badge" id="skillBadge"></b></button>
-      </nav>
-
-      <main id="main" class="main-content" tabindex="-1"></main>
     </div>
 
     <nav class="mobile-nav" aria-label="Mobile navigation">
@@ -63,16 +63,13 @@
   </div>
 
   <div id="toastRegion" class="toast-region" aria-live="polite"></div>
+  <dialog id="modal" class="modal"><div id="modalContent"></div></dialog>
 
-  <dialog id="modal" class="modal">
-    <div id="modalContent"></div>
-  </dialog>
-
-  <script src="data.js"></script>
-  <script src="engine.js"></script>
-  <script src="ui-main.js"></script>
-  <script src="ui-business.js"></script>
-  <script src="ui-actions.js"></script>
-  <script src="app.js"></script>
+  <script src="data.js?v=3"></script>
+  <script src="engine.js?v=3"></script>
+  <script src="ui-main.js?v=3"></script>
+  <script src="ui-business.js?v=3"></script>
+  <script src="ui-actions.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
