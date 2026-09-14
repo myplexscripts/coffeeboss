@@ -27,4 +27,6 @@
 
   if(typeof renderChallenges==='function') renderChallenges=wrap('challenges',renderChallenges);
   if(typeof renderBreakroom==='function') renderBreakroom=wrap('breakroom',renderBreakroom);
+  if(typeof renderReserve==='function') renderReserve=wrap('reserve',renderReserve);
+  if(typeof renderProfile==='function') renderProfile=wrap('profile',renderProfile);
 })();
