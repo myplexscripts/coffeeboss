@@ -7,6 +7,9 @@ function render(){
   const main=document.getElementById('main');
   const renderers={home:renderHome,shifts:renderShifts,rivals:renderRivals,locations:renderLocations,stockroom:renderStockroom,crew:renderCrew,challenges:renderChallenges,reserve:renderReserve,breakroom:renderBreakroom,profile:renderProfile};
   main.innerHTML=(renderers[currentPage]||renderHome)();
+  main.classList.remove('screen-enter');
+  void main.offsetWidth;
+  main.classList.add('screen-enter');
   bindPageActions();
   lucide.createIcons();
 }
@@ -30,12 +33,11 @@ function renderHome(){
   const district=districts.find(d=>d.id===state.district);
   const nextBoss=bosses.find(b=>state.level>=b.level&&!state.defeatedBosses.includes(b.id)) || bosses.find(b=>state.level<b.level);
   return `
-    ${pageHead('Your shop', 'Build something people line up for.', `Level ${state.level} Coffee Boss · ${district.name}${state.bossStyle ? ' · '+({operator:'Operator',owner:'Owner',competitor:'Competitor'}[state.bossStyle]) : ''}`)}
     <section class="card hero-card">
       <div class="hero-grid">
         <div>
           <span class="pill accent">${icon('coffee')} ${district.name}</span>
-          <h2 class="hero-title">One tiny shop. A lot of room to grow.</h2>
+          <h2 class="hero-title">Build something people line up for.</h2>
           <p class="hero-copy">Work shifts for cash and experience, build a crew, collect better gear, open income-producing locations, and take on rival cafés when you are ready.</p>
           <div class="hero-actions"><button class="btn primary" data-action="nav" data-page="shifts">${icon('zap')} Work a shift</button><button class="btn soft" data-action="nav" data-page="locations">${icon('store')} Grow the business</button></div>
         </div>
@@ -79,5 +81,5 @@ function renderShifts(){
   return `${pageHead('Jobs', 'Shifts', 'Spend energy to earn cash and XP. Repeating shifts builds mastery and slightly improves loot odds.')}
     <div class="tabs">${unlockedDistricts.map(d=>`<button class="tab ${d.id===tabDistrict.id?'active':''}" data-action="tab" data-tab="${d.id}">${d.name}</button>`).join('')}</div>
     <section class="card list-card">${rows}</section>
-    <section class="section"><div class="card card-pad"><h3>Energy</h3><p class="muted">Energy regenerates automatically. Level-ups also give you a partial refill, so chaining a level at the right time can keep a run going.</p><div class="progress green"><span style="width:${state.energy/state.maxEnergy*100}%"></span></div></div></section>`;
+    <section class="section"><div class="card card-pad"><h3>Energy</h3><p class="muted">Energy regenerates automatically. Level-ups also give you a partial refill, so chaining a level at the right time can keep a run going.</p><div class="progress energy"><span style="width:${state.energy/state.maxEnergy*100}%"></span></div></div></section>`;
 }
