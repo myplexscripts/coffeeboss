@@ -1,10 +1,50 @@
 'use strict';
 
+function resourceSnapshot(){
+  return {cash:state.cash,xp:state.xp,energy:state.energy,drive:state.drive,morale:state.morale,level:state.level};
+}
+function pulseHud(id,spent=false){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.classList.remove('hud-pop','hud-spend');
+  void el.offsetWidth;
+  el.classList.add(spent?'hud-spend':'hud-pop');
+  setTimeout(()=>el.classList.remove('hud-pop','hud-spend'),650);
+}
+function rewardBurst(text,type='good'){
+  const el=document.createElement('div');
+  el.className=`reward-burst ${type}`;
+  el.textContent=text;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1400);
+}
+function afterActionFeedback(before){
+  const changes=[];
+  const deltaCash=state.cash-before.cash;
+  const deltaXp=state.level===before.level?state.xp-before.xp:state.xp;
+  const deltaEnergy=state.energy-before.energy;
+  const deltaDrive=state.drive-before.drive;
+  const deltaMorale=state.morale-before.morale;
+
+  if(deltaCash!==0){ pulseHud('cashHud',deltaCash<0); changes.push({text:`${deltaCash>0?'+':''}${formatMoney(deltaCash)}`,type:deltaCash>0?'cash':'bad'}); }
+  if(deltaXp>0){ pulseHud('xpHud'); changes.push({text:`+${deltaXp.toLocaleString()} XP`,type:'xp'}); }
+  if(deltaEnergy!==0) pulseHud('energyHud',deltaEnergy<0);
+  if(deltaDrive!==0) pulseHud('driveHud',deltaDrive<0);
+  if(deltaMorale!==0) pulseHud('moraleHud',deltaMorale<0);
+  if(state.level>before.level){ pulseHud('xpHud'); changes.unshift({text:`LEVEL ${state.level}`,type:'xp'}); }
+
+  if(changes.length){
+    rewardBurst(changes.slice(0,2).map(c=>c.text).join('   '),changes[0].type);
+  }
+}
+
 function bindPageActions(){
   document.querySelectorAll('[data-action]').forEach(el=>el.addEventListener('click',()=>{
     const a=el.dataset.action;
-    if(a==='nav'){ currentPage=el.dataset.page; currentTab=null; render(); document.getElementById('main').focus({preventScroll:true}); window.scrollTo({top:0,behavior:'smooth'}); }
-    if(a==='tab'){ currentTab=el.dataset.tab; render(); }
+    if(a==='nav'){ currentPage=el.dataset.page; currentTab=null; render(); document.getElementById('main').focus({preventScroll:true}); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    if(a==='tab'){ currentTab=el.dataset.tab; render(); return; }
+
+    const before=resourceSnapshot();
     if(a==='shift') performShift(el.dataset.id);
     if(a==='location') buyLocation(el.dataset.id);
     if(a==='buy-item') buyItem(el.dataset.id);
@@ -21,6 +61,7 @@ function bindPageActions(){
       const input=document.getElementById(el.dataset.direction==='deposit'?'depositAmount':'withdrawAmount');
       transferReserve(el.dataset.direction,input.value);
     }
+    requestAnimationFrame(()=>afterActionFeedback(before));
   }));
 }
 function navigate(page){ currentPage=page; currentTab=null; render(); window.scrollTo({top:0,behavior:'smooth'}); }
