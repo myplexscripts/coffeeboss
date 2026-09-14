@@ -109,6 +109,10 @@ function cbxMasteryLabel(value){
 }
 
 function cbxHomeObjective(){
+  if(state.jobsCompleted<3) return {icon:'coffee',label:'START HERE · 1 OF 4',title:'Serve your first three shifts',copy:`${state.jobsCompleted}/3 worked. Head to Shifts and choose Serve the Regulars. Repeatable shifts are small batches of work, not a new day each time.`,action:'shifts',button:'GO TO SHIFTS'};
+  if(!state.locationsBought) return {icon:'shopping-cart',label:'NEXT UP · 2 OF 4',title:'Open your first Coffee Cart',copy:'Save $450 from shifts, then open a Coffee Cart in Locations. It earns cash every minute, even while you are away.',action:state.cash>=450?'locations':'shifts',button:state.cash>=450?'OPEN A COFFEE CART':'EARN THE REST'};
+  if(state.crew.length<2) return {icon:'user-plus',label:'NEXT UP · 3 OF 4',title:'Give Maya some backup',copy:'Recruit one person for $300. They add power and let you use more gear. Keep working shifts if you need the cash.',action:state.cash>=300?'crew':'shifts',button:state.cash>=300?'MEET YOUR NEXT HIRE':'WORK ANOTHER SHIFT'};
+  if(state.rivalsBeaten+state.rivalLosses===0) return {icon:'swords',label:'TRY IT OUT · 4 OF 4',title:'Try a rival challenge',copy:'Visit Rivals and compare their strength with yours. Gear and skill upgrades help if they look too tough. Winning is not required to move on.',action:'rivals',button:'LOOK AT THE RIVALS'};
   const ready=bosses.find(b=>state.level>=b.level&&!state.defeatedBosses.includes(b.id));
   if(ready) return {icon:ready.icon,label:'READY NOW',title:ready.name,copy:'This one is waiting for you. Build Drive and Morale, then make your push.',action:'challenges',button:'FACE THE CHALLENGE'};
   const next=bosses.find(b=>state.level<b.level);
@@ -122,6 +126,7 @@ renderHome=function(){
   const objective=cbxHomeObjective();
   const nextDistrict=districts.find(d=>d.level>state.level);
   return `<div class="scene-screen home-scene">
+    <section class="first-steps" aria-label="Your next step"><span>${objective.label}</span><h2>${objective.title}</h2><p>${objective.copy}</p><button class="quest-button" data-action="nav" data-page="${objective.action}">${objective.button}${icon('arrow-right')}</button><details><summary>How the game works</summary><p>Work shifts for cash and XP. Open locations for steady income. Recruit crew and buy gear to get stronger. Then take on rivals and major challenges. There is no daily schedule: each shift is another batch of work, and you choose when to stop.</p></details></section>
     <header class="home-stage">
       <div class="home-stage-copy">
         <span class="scene-kicker">${district.name.toUpperCase()} · LEVEL ${state.level}</span>

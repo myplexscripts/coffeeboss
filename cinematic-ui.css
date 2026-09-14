@@ -26,6 +26,16 @@
   --shadow:0 28px 80px rgba(0,0,0,.38);
 }
 
+/* Intrinsic sizing must never push copy outside a viewport or icon plate. */
+.scene-screen :where(article,section,div,button){min-width:0}
+.scene-screen :where(h1,h2,p,strong,small,span){overflow-wrap:anywhere}
+.first-steps{padding:24px;margin-bottom:16px;background:#192637}
+.first-steps>span{color:var(--coffee-2);font-size:14px;font-weight:900}
+.first-steps h2{margin:6px 0;font-size:26px}
+.first-steps p{max-width:760px;line-height:1.55;color:var(--text-2)}
+.first-steps details{margin-top:16px;font-size:14px}
+.first-steps summary{cursor:pointer;color:var(--muted)}
+
 body{
   background:
     radial-gradient(circle at 82% -20%,rgba(74,119,183,.19),transparent 37rem),
@@ -702,4 +712,27 @@ button:disabled{cursor:not-allowed!important;filter:saturate(.45);opacity:.43!im
 @media(prefers-reduced-motion:reduce){
   .screen-enter::after,.scene-screen,.scene-screen>*,.scene-emblem-ring,.report-wipe,.report-icon,.crew-member,.story-beat{animation:none!important}
   .action-report,.action-report-layer{transition:none!important}
+}
+
+/* Final shared layout rules override earlier narrow fixed-size plates. */
+.locker-art{clip-path:none;border-radius:8px;min-height:104px;height:auto;padding:12px 4px}
+.locker-art span{max-width:100%;font-size:14px;line-height:1.25;text-align:center;overflow-wrap:anywhere}
+.locker-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.locker-slot{gap:16px;padding:20px;grid-template-columns:96px minmax(0,1fr)}
+.locker-art{width:96px}
+.locker-copy{padding-right:12px}
+.locker-slot>button{gap:12px;flex-wrap:wrap;min-height:48px}
+.locker-count{top:6px;right:6px}
+.quest-stage{grid-template-columns:90px minmax(0,1fr)}
+.quest-stage .quest-button{grid-column:2;justify-self:start}
+.vault-input{grid-template-columns:minmax(0,1fr)}
+.scene-screen button{white-space:normal;line-height:1.3}
+.next-stop,.skill-branch{border-left:0}
+@media(max-width:760px){
+  .mobile-nav{display:grid;position:fixed;left:0;right:0;bottom:0;height:var(--bottom-nav);grid-template-columns:repeat(5,1fr);z-index:70}
+  .first-steps{padding:20px}
+  .locker-slot{padding:16px;gap:12px;grid-template-columns:96px minmax(0,1fr)}
+  .scene-intro,.crew-call,.boss-stage,.rest-stage,.vault-console{padding:20px}
+  .quest-stage .quest-button{grid-column:1/-1;justify-self:stretch}
+  .scene-inline-facts{gap:16px}
 }

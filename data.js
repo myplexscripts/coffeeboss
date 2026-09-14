@@ -22,24 +22,24 @@ const districts = [
 ];
 
 const shifts = [
-  { id:'open', district:'old-market', level:1, name:'Open the Shop', description:'Dial in the grinder, count the till, get the doors open.', energy:3, cash:[35,55], xp:5, mastery:8, icon:'door-open', loot:['paper-cups'] },
+  { id:'open', district:'old-market', level:1, name:'Serve the Regulars', description:'Pour a few familiar orders and keep the counter moving. A short, repeatable shift.', energy:3, cash:[35,55], xp:5, mastery:8, icon:'coffee', loot:['paper-cups'] },
   { id:'morning', district:'old-market', level:1, name:'Handle the Morning Rush', description:'Keep the line moving without letting drink quality slip.', energy:5, cash:[65,95], xp:8, mastery:10, icon:'sunrise', loot:['oat-milk','syrup-pump'] },
   { id:'delivery', district:'old-market', level:2, name:'Fill a Delivery Order', description:'Box drinks and pastries for a nearby office.', energy:7, cash:[105,145], xp:11, mastery:12, icon:'bike', loot:['delivery-bag'] },
   { id:'train', district:'old-market', level:3, name:'Train a New Barista', description:'Spend time now to make the whole crew stronger later.', energy:9, cash:[135,185], xp:15, mastery:14, icon:'graduation-cap', loot:['training-cards'] },
   { id:'catering', district:'old-market', level:5, name:'Cater a Small Event', description:'Prep urns, pastry trays, cups, milk, and a lot of patience.', energy:12, cash:[220,310], xp:21, mastery:17, icon:'party-popper', loot:['thermal-carafe','event-crate'] },
 
   { id:'office-rush', district:'downtown', level:8, name:'Crush the Office Rush', description:'Hundreds of people want caffeine at exactly the same time.', energy:14, cash:[330,430], xp:28, mastery:20, icon:'briefcase-business', loot:['batch-brewer','fast-pitcher'] },
-  { id:'corporate', district:'downtown', level:10, name:'Win a Corporate Account', description:'Make the tasting good enough to land recurring office orders.', energy:18, cash:[470,630], xp:36, mastery:24, icon:'handshake', loot:['client-book'] },
-  { id:'launch', district:'downtown', level:12, name:'Launch a Seasonal Drink', description:'Test a limited drink and hope customers actually care.', energy:20, cash:[580,760], xp:42, mastery:26, icon:'sparkles', loot:['seasonal-syrup'] },
+  { id:'corporate', district:'downtown', level:10, name:'Fulfil Office Orders', description:'Prepare another round of coffee for your office customers.', energy:18, cash:[470,630], xp:36, mastery:24, icon:'handshake', loot:['client-book'] },
+  { id:'launch', district:'downtown', level:12, name:'Serve Seasonal Specials', description:'Mix another batch of the seasonal favourite and keep the orders moving.', energy:20, cash:[580,760], xp:42, mastery:26, icon:'sparkles', loot:['seasonal-syrup'] },
 
   { id:'study', district:'university', level:16, name:'Survive Study Week', description:'The shop is full from open to close. Nobody plans on leaving.', energy:23, cash:[800,1020], xp:55, mastery:29, icon:'book-open', loot:['cold-brew-tower'] },
-  { id:'campus', district:'university', level:19, name:'Land the Campus Contract', description:'Pitch bulk coffee service to departments and events.', energy:28, cash:[1100,1450], xp:68, mastery:33, icon:'file-signature', loot:['service-cart'] },
+  { id:'campus', district:'university', level:19, name:'Deliver Campus Orders', description:'Get the next batch of coffee to departments and campus events.', energy:28, cash:[1100,1450], xp:68, mastery:33, icon:'file-signature', loot:['service-cart'] },
 
   { id:'weekend', district:'waterfront', level:26, name:'Run the Weekend Surge', description:'Tourists pour in. Every table turns twice as fast.', energy:32, cash:[1750,2200], xp:82, mastery:37, icon:'waves', loot:['premium-grinder'] },
   { id:'private', district:'waterfront', level:31, name:'Host a Private Tasting', description:'Serve rare coffees to people who absolutely notice the details.', energy:38, cash:[2350,3100], xp:97, mastery:41, icon:'wine', loot:['cupping-set','rare-beans'] },
 
   { id:'gate-rush', district:'airport', level:40, name:'Handle a Gate Rush', description:'A delayed flight empties straight into your line.', energy:45, cash:[3900,4900], xp:120, mastery:45, icon:'plane-takeoff', loot:['rapid-rinser'] },
-  { id:'airline', district:'airport', level:46, name:'Pitch an Airline Lounge', description:'Win a huge recurring account with unforgiving standards.', energy:52, cash:[5600,7200], xp:150, mastery:50, icon:'badge-check', loot:['precision-brewer'] }
+  { id:'airline', district:'airport', level:46, name:'Serve the Airline Lounge', description:'Handle another round of lounge orders with unforgiving standards.', energy:52, cash:[5600,7200], xp:150, mastery:50, icon:'badge-check', loot:['precision-brewer'] }
 ];
 
 const locations = [

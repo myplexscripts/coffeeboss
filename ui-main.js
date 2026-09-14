@@ -7,9 +7,10 @@ function render(){
   const main=document.getElementById('main');
   const renderers={home:renderHome,shifts:renderShifts,rivals:renderRivals,locations:renderLocations,stockroom:renderStockroom,crew:renderCrew,challenges:renderChallenges,reserve:renderReserve,breakroom:renderBreakroom,profile:renderProfile};
   main.innerHTML=(renderers[currentPage]||renderHome)();
+  const pageChanged=main.dataset.page!==currentPage;
+  main.dataset.page=currentPage;
   main.classList.remove('screen-enter');
-  void main.offsetWidth;
-  main.classList.add('screen-enter');
+  if(pageChanged){ void main.offsetWidth; main.classList.add('screen-enter'); }
   bindPageActions();
   lucide.createIcons();
 }
