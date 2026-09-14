@@ -11,31 +11,29 @@ function pulseHud(id,spent=false){
   el.classList.add(spent?'hud-spend':'hud-pop');
   setTimeout(()=>el.classList.remove('hud-pop','hud-spend'),650);
 }
-function rewardBurst(text,type='good'){
+function rewardBurst(parts){
+  if(!parts.length) return;
   const el=document.createElement('div');
-  el.className=`reward-burst ${type}`;
-  el.textContent=text;
+  el.className='reward-burst reward-stack';
+  el.innerHTML=parts.slice(0,4).map(p=>`<span class="reward-part ${p.type}">${p.text}</span>`).join('');
   document.body.appendChild(el);
-  setTimeout(()=>el.remove(),1400);
+  setTimeout(()=>el.remove(),1550);
 }
 function afterActionFeedback(before){
-  const changes=[];
+  const parts=[];
   const deltaCash=state.cash-before.cash;
   const deltaXp=state.level===before.level?state.xp-before.xp:state.xp;
   const deltaEnergy=state.energy-before.energy;
   const deltaDrive=state.drive-before.drive;
   const deltaMorale=state.morale-before.morale;
 
-  if(deltaCash!==0){ pulseHud('cashHud',deltaCash<0); changes.push({text:`${deltaCash>0?'+':''}${formatMoney(deltaCash)}`,type:deltaCash>0?'cash':'bad'}); }
-  if(deltaXp>0){ pulseHud('xpHud'); changes.push({text:`+${deltaXp.toLocaleString()} XP`,type:'xp'}); }
-  if(deltaEnergy!==0) pulseHud('energyHud',deltaEnergy<0);
-  if(deltaDrive!==0) pulseHud('driveHud',deltaDrive<0);
-  if(deltaMorale!==0) pulseHud('moraleHud',deltaMorale<0);
-  if(state.level>before.level){ pulseHud('xpHud'); changes.unshift({text:`LEVEL ${state.level}`,type:'xp'}); }
-
-  if(changes.length){
-    rewardBurst(changes.slice(0,2).map(c=>c.text).join('   '),changes[0].type);
-  }
+  if(state.level>before.level){ pulseHud('xpHud'); parts.push({text:`LEVEL ${state.level}`,type:'xp'}); }
+  if(deltaCash!==0){ pulseHud('cashHud',deltaCash<0); parts.push({text:`${deltaCash>0?'+':'-'}${formatMoney(Math.abs(deltaCash))}`,type:'cash'}); }
+  if(deltaXp>0){ pulseHud('xpHud'); parts.push({text:`+${deltaXp.toLocaleString()} XP`,type:'xp'}); }
+  if(deltaEnergy!==0){ pulseHud('energyHud',deltaEnergy<0); parts.push({text:`${deltaEnergy>0?'+':''}${deltaEnergy} Energy`,type:'energy'}); }
+  if(deltaDrive!==0){ pulseHud('driveHud',deltaDrive<0); parts.push({text:`${deltaDrive>0?'+':''}${deltaDrive} Drive`,type:'drive'}); }
+  if(deltaMorale!==0){ pulseHud('moraleHud',deltaMorale<0); parts.push({text:`${deltaMorale>0?'+':''}${deltaMorale} Morale`,type:'morale'}); }
+  rewardBurst(parts);
 }
 
 function bindPageActions(){
@@ -67,7 +65,7 @@ function bindPageActions(){
 function navigate(page){ currentPage=page; currentTab=null; render(); window.scrollTo({top:0,behavior:'smooth'}); }
 function showMoreMenu(){
   const m=document.getElementById('modal');
-  document.getElementById('modalContent').innerHTML=`<div class="modal-head"><h2>More</h2><button class="icon-button" data-close>${icon('x')}</button></div><div class="modal-body settings-grid">${[['stockroom','package-open','Stockroom'],['crew','users','Crew'],['challenges','trophy','Challenges'],['reserve','landmark','Reserve'],['breakroom','armchair','Break Room'],['profile','circle-user-round','Boss']].map(([p,i,n])=>`<button class="btn soft" data-modal-nav="${p}">${icon(i)} ${n}</button>`).join('')}</div>`;
+  document.getElementById('modalContent').innerHTML=`<div class="modal-head"><h2>More</h2><button class="icon-button" data-close>${icon('x')}</button></div><div class="modal-body settings-grid">${[['stockroom','package-open','Stockroom'],['crew','users','Crew'],['challenges','trophy','Challenges'],['reserve','landmark','Reserve'],['breakroom','heart-pulse','Break Room'],['profile','circle-user-round','Boss']].map(([p,i,n])=>`<button class="btn soft" data-modal-nav="${p}">${icon(i)} ${n}</button>`).join('')}</div>`;
   m.showModal(); lucide.createIcons();
   m.querySelector('[data-close]').onclick=()=>m.close();
   m.querySelectorAll('[data-modal-nav]').forEach(b=>b.onclick=()=>{m.close();navigate(b.dataset.modalNav)});
@@ -94,7 +92,7 @@ function showSettings(){
 
 function showBossStyle(){
   const m=document.getElementById('modal');
-  document.getElementById('modalContent').innerHTML=`<div class="modal-head"><div><p class="eyebrow">Choose your edge</p><h2>What kind of Coffee Boss are you?</h2></div></div><div class="modal-body"><p class="muted">This changes how your shop recovers or earns, but it does not lock any content.</p><div class="grid-3" style="margin-top:14px"><button class="card card-pad" style="text-align:left;color:inherit;cursor:pointer" data-style="operator"><div class="icon-chip">${icon('zap')}</div><h3 style="margin-top:12px">Operator</h3><p class="muted">Energy regenerates 25% faster. Best for doing more shifts.</p></button><button class="card card-pad" style="text-align:left;color:inherit;cursor:pointer" data-style="owner"><div class="icon-chip">${icon('store')}</div><h3 style="margin-top:12px">Owner</h3><p class="muted">Locations earn 25% more passive income.</p></button><button class="card card-pad" style="text-align:left;color:inherit;cursor:pointer" data-style="competitor"><div class="icon-chip">${icon('swords')}</div><h3 style="margin-top:12px">Competitor</h3><p class="muted">Drive and Morale regenerate faster for challenges.</p></button></div></div>`;
+  document.getElementById('modalContent').innerHTML=`<div class="modal-head"><div><p class="eyebrow">Choose your edge</p><h2>Pick a Boss style</h2></div></div><div class="modal-body"><div class="grid-3" style="margin-top:4px"><button class="card card-pad" style="text-align:left;color:inherit;cursor:pointer" data-style="operator"><div class="icon-chip">${icon('zap')}</div><h3 style="margin-top:12px">Operator</h3><p class="muted">Energy regenerates 25% faster.</p></button><button class="card card-pad" style="text-align:left;color:inherit;cursor:pointer" data-style="owner"><div class="icon-chip">${icon('store')}</div><h3 style="margin-top:12px">Owner</h3><p class="muted">Locations earn 25% more.</p></button><button class="card card-pad" style="text-align:left;color:inherit;cursor:pointer" data-style="competitor"><div class="icon-chip">${icon('swords')}</div><h3 style="margin-top:12px">Competitor</h3><p class="muted">Drive and Morale recover faster.</p></button></div></div>`;
   m.showModal(); lucide.createIcons();
   m.querySelectorAll('[data-style]').forEach(b=>b.onclick=()=>{ state.bossStyle=b.dataset.style; state.lastEnergyRegen=Date.now(); state.lastDriveRegen=Date.now(); state.lastMoraleRegen=Date.now(); saveState(true); m.close(); render(); toast(`${b.textContent.trim().split(/\s+/)[0]} style selected.`, 'good'); });
 }
