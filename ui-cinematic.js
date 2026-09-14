@@ -337,7 +337,7 @@ renderCrew=function(){
     <section class="crew-stage">
       <div class="crew-call"><div class="crew-call-art">${icon('user-plus')}</div><div><span>THERE IS ROOM BEHIND THE BAR</span><h2>Bring in another pair of hands</h2><p>The next hire adds power and opens one more gear slot.</p></div><button data-action="recruit" ${state.cash<cost?'disabled':''}><span>RECRUIT SOMEONE</span><strong>${formatMoney(cost)}</strong></button></div>
       <div class="crew-lineup">${state.crew.map((member,index)=>`<article class="crew-member" style="--member:${index}">
-        <div class="crew-portrait"><span>${member.name.slice(0,1)}</span>${icon(index===0?'coffee':'sparkles')}</div>
+        <div class="crew-portrait">${shopAvatar(member.name)}</div>
         <div class="crew-card-copy"><span>${index===0?'ORIGINAL CREW':`CREW #${index+1}`}</span><h2>${member.name}</h2><p>${member.role}</p></div>
         <div class="crew-card-power"><small>POWER</small><strong>+${member.power}</strong></div>
       </article>`).join('')}</div>
@@ -418,7 +418,7 @@ renderProfile=function(){
   const extras=`<div class="scene-inline-facts">${cbxReadout('Skill points',state.skillPoints,'sparkles','xp')}${cbxReadout('Boss Points',state.bossPoints,'crown','xp')}</div>`;
   return `<div class="scene-screen profile-scene">
     ${cbxSceneIntro('profile',extras)}
-    <section class="skill-stage"><div class="skill-core"><span>${icon('coffee')}</span><strong>LEVEL ${state.level}</strong><small>COFFEE BOSS</small></div><div class="skill-branches">${cbSkillData.map(([id,iconName,name,desc,inc,tone],index)=>`<article class="skill-branch ${tone}" style="--branch:${index}"><span class="skill-branch-icon">${icon(iconName)}</span><div><span>${name.toUpperCase()}</span><h2>${valueFor(id)}</h2><p>${desc}</p></div><button data-action="skill" data-stat="${id}" data-name="${name}" ${state.skillPoints<1?'disabled':''}>+${inc}</button></article>`).join('')}</div></section>
+    <section class="skill-stage"><div class="skill-core"><span>${shopAvatar('Felix')}</span><strong>LEVEL ${state.level}</strong><small>COFFEE BOSS</small></div><div class="skill-branches">${cbSkillData.map(([id,iconName,name,desc,inc,tone],index)=>`<article class="skill-branch ${tone}" style="--branch:${index}"><span class="skill-branch-icon">${icon(iconName)}</span><div><span>${name.toUpperCase()}</span><h2>${valueFor(id)}</h2><p>${desc}</p></div><button data-action="skill" data-stat="${id}" data-name="${name}" ${state.skillPoints<1?'disabled':''}>+${inc}</button></article>`).join('')}</div></section>
     <div class="chapter-break"><span>COLLECTION CABINET</span><p>Complete a shelf to claim its reward.</p></div>
     <section class="collection-cabinet">${collections.map(cbxCollection).join('')}</section>
     <section class="career-tape">${cbxReadout('Shifts worked',state.jobsCompleted,'clipboard-check')}${cbxReadout('Lifetime cash',formatMoney(state.lifetimeIncome),'banknote','cash')}${cbxReadout('Gear found',state.itemsFound,'package-open')}${cbxReadout('Achievements',state.achievements.length,'medal','xp')}</section>

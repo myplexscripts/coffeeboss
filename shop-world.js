@@ -2,6 +2,9 @@
 
 // The shop is the hub. Workspaces open over it, keeping a place to return to.
 const shopPageNames={shifts:'At the counter',rivals:'Around the block',locations:'The neighbourhood',stockroom:'Behind the bar',crew:'Your crew',challenges:'The noticeboard',reserve:'The safe',breakroom:'Take five',profile:'The boss'};
+function shopAvatar(seed='Felix'){
+  return `<img class="micah-avatar" src="https://api.dicebear.com/10.x/micah/svg?seed=${encodeURIComponent(seed).replace(/'/g,'%27')}" width="96" height="96" alt="" decoding="async">`;
+}
 function shopRoom(interactive=true){
   const spot=(page,cls,label,detail)=>interactive?`<button class="shop-spot ${cls}" data-action="nav" data-page="${page}"><span>${label}</span><small>${detail}</small>${icon('arrow-up-right')}</button>`:'';
   const gear=items.filter(i=>(state.inventory[i.id]||0)>0).sort((a,b)=>(b.service+b.quality)-(a.service+a.quality))[0];
@@ -13,7 +16,7 @@ function shopRoom(interactive=true){
     <div class="shop-menu"><b>ON THE MENU</b><span>Espresso · Latte</span><span>Good coffee. No rush.</span><hr><strong>Fresh batch, coming up.</strong></div>
     <div class="shop-board"><b>WHAT'S ON</b><i>LATTE ART</i><i>LOCAL RIVALS</i></div>
     <div class="shop-plant"><i></i><i></i><i></i><b></b></div>
-    <div class="shop-barista"><div class="barista-head"></div><div class="barista-apron"></div><span>${state.crew.length===1?'Maya':`${state.crew.length} crew`}</span></div>
+    <div class="shop-barista">${shopAvatar(state.crew[0]?.name||'Maya')}<span>${state.crew.length===1?'Maya':`${state.crew.length} crew`}</span></div>
     <div class="shop-machine"><div class="machine-controls"><i></i><i></i><i></i></div><div class="machine-spouts"></div><div class="machine-cup"></div><span class="coffee-steam"></span></div>
     <div class="shop-counter"><span>COFFEE <b>BOSS</b></span><div class="counter-stripes"></div></div>
     <div class="shop-cups"><i></i><i></i><i></i></div>
@@ -90,7 +93,8 @@ Object.entries(shopResourceHints).forEach(([id,hint])=>{
 // One dock on every screen. The room supplies the remaining destinations.
 const dock=document.querySelector('.mobile-nav');
 dock.setAttribute('aria-label','Game navigation');
-dock.innerHTML=[['home','house','Shop'],['shifts','coffee','Serve'],['locations','map','Grow'],['challenges','trophy','Events'],['more','menu','More']].map(([page,ico,name])=>`<button class="mobile-nav-item" data-nav="${page}">${icon(ico)}<span>${name}</span></button>`).join('');
+dock.innerHTML=[['home','house','Shop'],['shifts','coffee','Serve'],['rivals','swords','Rivals','desktop'],['locations','map','Grow'],['stockroom','package-open','Supplies','desktop'],['crew','users','Crew','desktop'],['challenges','trophy','Events'],['reserve','landmark','Safe','desktop'],['breakroom','heart-pulse','Break room','desktop'],['profile','circle-user-round','Boss','desktop'],['more','menu','More','mobile']].map(([page,ico,name,visibility])=>`<button class="mobile-nav-item ${visibility?`nav-${visibility}-only`:''}" data-nav="${page}" title="${name}">${icon(ico)}<span>${name}</span></button>`).join('')+`<button class="mobile-nav-item nav-desktop-only" data-dock-options title="Save & options">${icon('settings-2')}<span>Options</span></button>`;
+dock.querySelector('[data-dock-options]').addEventListener('click',showSettings);
 showMoreMenu=function(){
   const modal=document.getElementById('modal');
   modal.classList.remove('shift-modal','shift-resolving');

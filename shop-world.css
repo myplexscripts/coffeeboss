@@ -92,3 +92,36 @@ button:focus-visible,[role=button]:focus-visible,summary:focus-visible{outline:3
   .mobile-nav{bottom:max(8px,env(safe-area-inset-bottom));height:64px}.main-content{padding-bottom:88px}.event-brief{padding:16px}.event-brief h2{font-size:24px}
 }
 @media(prefers-reduced-motion:reduce){.coffee-steam{animation:none}.shop-spot{transition:none}}
+
+/* Artwork keeps its proportions independently of copy and action widths. */
+.workspace-body .route-stop{grid-template-columns:72px minmax(0,1fr) 140px;align-items:center}
+.workspace-body .route-node{display:grid;place-items:center;width:72px;height:72px;min-width:72px;gap:0;align-self:center}
+.workspace-body .route-node>span{width:100%;height:auto;aspect-ratio:1;min-width:0;border:3px solid #426c60;box-sizing:border-box;box-shadow:none;border-radius:50%}
+.workspace-body .route-node svg{width:28px;height:28px;flex-shrink:0;aspect-ratio:1}
+.workspace-body .route-node b{position:absolute;z-index:3;right:-4px;top:-4px;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#17382e;color:#c9dccd;font-size:11px}
+.workspace-body .location-route-line{left:54px;width:4px}
+.workspace-body .route-place,.workspace-body .route-income{min-width:0}
+.workspace-body :is(.mission-art,.locker-art,.boss-stage-art,.crew-portrait){flex-shrink:0}
+.workspace-body :is(.mission-art,.locker-art,.boss-stage-art)>svg{flex-shrink:0;aspect-ratio:1}
+.micah-avatar{display:block;width:100%;height:100%;aspect-ratio:1;object-fit:contain}
+.workspace-body .crew-portrait{width:80px;height:80px;min-width:80px;aspect-ratio:1;overflow:hidden;border-radius:50%;background:#dfd5b8;box-shadow:none}
+.shop-barista>.micah-avatar{position:absolute;bottom:0;width:100%;height:auto;aspect-ratio:1;object-fit:contain}
+.skill-core>span:has(.micah-avatar){width:112px;height:112px;padding:0;overflow:hidden;border-radius:50%;background:#dfd5b8}
+.nav-desktop-only{display:none}
+@media(min-width:701px){
+  .mobile-nav{width:min(1100px,calc(100% - 32px));grid-template-columns:repeat(11,minmax(0,1fr))}
+  .mobile-nav .nav-desktop-only{display:flex}
+  .mobile-nav .nav-mobile-only{display:none}
+  .mobile-nav-item{min-height:44px}
+}
+@media(min-width:701px) and (max-width:1000px){
+  .mobile-nav-item span{font-size:10px}
+  .mobile-nav-item svg{width:22px;height:22px}
+}
+@media(max-width:700px){
+  .workspace-body .route-stop{grid-template-columns:56px minmax(0,1fr)}
+  .workspace-body .route-node{width:56px;height:56px;min-width:56px}
+  .workspace-body .location-route-line{left:42px}
+  .workspace-body .route-node svg{width:26px;height:26px}
+  .workspace-body .crew-portrait{width:64px;height:64px;min-width:64px}
+}
