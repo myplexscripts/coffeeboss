@@ -10,7 +10,6 @@ function render(){
   const pageChanged=main.dataset.page!==currentPage;
   main.dataset.page=currentPage;
   main.classList.remove('screen-enter');
-  if(pageChanged){ void main.offsetWidth; main.classList.add('screen-enter'); }
   bindPageActions();
   lucide.createIcons();
 }

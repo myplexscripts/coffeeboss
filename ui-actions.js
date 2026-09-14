@@ -61,6 +61,10 @@ function bindPageActions(){
     const a=el.dataset.action;
     if(a==='nav'){ currentPage=el.dataset.page; currentTab=null; render(); document.getElementById('main').focus({preventScroll:true}); window.scrollTo({top:0,behavior:'smooth'}); return; }
     if(a==='tab'){ currentTab=el.dataset.tab; render(); return; }
+    if(['challenge','rival','boss'].includes(a)){
+      cbxEventBrief({...el.dataset});
+      return;
+    }
 
     const before=resourceSnapshot();
     const context={

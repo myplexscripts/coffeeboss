@@ -1,5 +1,58 @@
 'use strict';
 
+function cbxResourceGuide(scene){
+  const energySeconds=state.bossStyle==='operator'?45:60;
+  const driveSeconds=state.bossStyle==='competitor'?65:90;
+  const moraleSeconds=state.bossStyle==='competitor'?90:120;
+  const entries={
+    energy:['zap','Energy',`Your shift budget. Each shift costs Energy, so choose work you can afford. It returns automatically: 1 every ${energySeconds} seconds, up to your maximum.`],
+    drive:['flame','Drive',`Your challenge budget. Rivals cost 1; major challenges cost 1 or 3 per push. It returns automatically: 1 every ${driveSeconds} seconds.`],
+    morale:['heart-pulse','Morale',`How much pressure your crew can take. Rival and major challenges wear it down. You need at least 8 for rivals and 10 for major challenges. It also affects shift performance. Recover in the Break Room or wait: 1 returns every ${moraleSeconds} seconds.`]
+  };
+  const keys=scene==='shifts'?['energy','morale']:['rivals','challenges'].includes(scene)?['drive','morale']:scene==='home'||scene==='breakroom'?Object.keys(entries):[];
+  if(!keys.length)return '';
+  return `<aside class="resource-guide" aria-label="How your resources work">${keys.map(key=>{const [ico,title,copy]=entries[key];return `<details><summary>${icon(ico)}${title}: what is it for?</summary><p>${copy}</p></details>`;}).join('')}</aside>`;
+}
+
+function cbxEventBrief(context){
+  const modal=document.getElementById('modal');
+  const content=document.getElementById('modalContent');
+  const boss=context.action==='boss'?bosses.find(b=>b.id===context.id):null;
+  const rival=context.action==='rival'?rivalList()[Number(context.index)]:null;
+  const title=boss?.name||rival?.name||context.name||'Special event';
+  const cost=context.action==='challenge'?'1 challenge token':`${context.power==='1'?3:1} Drive, plus Morale from the pressure`;
+  const description=context.action==='challenge'
+    ? {latte:'The cups are lined up. Put your pour in front of the judges and see what it earns.',speed:'The orders are coming in. This round earns XP and restores some Energy.',crate:'A sealed delivery just arrived. Open it to reveal cash or a piece of gear.'}[context.type]
+    : boss?'Every push reduces the remaining pressure. Your progress stays, even if you need a break between attempts.':'Your Service faces their Quality. Your Quality helps limit the Morale you lose. A loss can cost cash from the till.';
+  modal.classList.remove('shift-modal','shift-resolving');
+  content.innerHTML=`<section class="event-brief"><span class="scene-kicker">BEFORE YOU BEGIN</span><h2>${title}</h2><p>${description}</p><p><strong>Cost:</strong> ${cost}</p><p>Rewards are calculated by the game. This is a result reveal, not a timing minigame.</p><div class="event-buttons"><button class="btn soft" data-event-back>Not yet</button><button class="btn primary" data-event-start>${context.type==='crate'?'Open the crate':'Start the challenge'}</button></div></section>`;
+  modal.showModal();
+  content.querySelector('[data-event-back]').onclick=()=>modal.close();
+  content.querySelector('[data-event-start]').onclick=()=>{
+    const stages=context.type==='crate'?['Breaking the seal…','Unpacking the delivery…','Here is what was inside.']:context.action==='rival'?['The rush is on…','Both crews are pushing…','The results are in.']:context.action==='boss'?['Your crew steps up…','Putting on the pressure…','Let’s see how far you got.']:['Taking your place…','The round is underway…','The results are in.'];
+    let finished=false;
+    const finish=()=>{
+      if(finished)return;finished=true;
+      const before=resourceSnapshot();
+      window.cbxActionInFlight=true;
+      try{
+        if(context.action==='challenge')runChallenge(context.type);
+        if(context.action==='rival')challengeRival(Number(context.index));
+        if(context.action==='boss')bossAttack(context.id,context.power==='1');
+      }finally{window.cbxActionInFlight=false;modal.oncancel=null;modal.close();}
+      afterActionFeedback(before,context);
+    };
+    modal.oncancel=e=>e.preventDefault();
+    content.innerHTML=`<section class="event-brief event-performance"><div class="event-performance-icon">${icon(context.type==='crate'?'package-open':'trophy')}</div><h2>${title}</h2><p role="status" aria-live="polite" id="eventStage">${stages[0]}</p><progress max="3" value="1" aria-label="Challenge reveal progress"></progress><button class="btn soft" data-event-skip>Show result now</button></section>`;
+    lucide.createIcons();
+    content.querySelector('[data-event-skip]').onclick=finish;
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced){finish();return;}
+    [1,2].forEach(n=>setTimeout(()=>{if(!finished){content.querySelector('#eventStage').textContent=stages[n];content.querySelector('progress').value=n+1;}},n*800));
+    setTimeout(finish,2400);
+  };
+}
+
 /*
  * The cinematic presentation layer deliberately leaves the game engine alone.
  * Every screen below is composed as a place in the game, not a dashboard.
@@ -78,6 +131,7 @@ function cbxSceneIntro(scene, extras=''){
       <span class="scene-kicker">${item.kicker}</span>
       <h1>${item.title}</h1>
       <p>${item.copy}</p>
+      ${cbxResourceGuide(scene)}
       <div class="scene-prompt">${icon('mouse-pointer-click')}<span>${item.prompt}</span></div>
       ${extras}
     </div>
@@ -127,6 +181,7 @@ renderHome=function(){
   const nextDistrict=districts.find(d=>d.level>state.level);
   return `<div class="scene-screen home-scene">
     <section class="first-steps" aria-label="Your next step"><span>${objective.label}</span><h2>${objective.title}</h2><p>${objective.copy}</p><button class="quest-button" data-action="nav" data-page="${objective.action}">${objective.button}${icon('arrow-right')}</button><details><summary>How the game works</summary><p>Work shifts for cash and XP. Open locations for steady income. Recruit crew and buy gear to get stronger. Then take on rivals and major challenges. There is no daily schedule: each shift is another batch of work, and you choose when to stop.</p></details></section>
+    ${cbxResourceGuide('home')}
     <header class="home-stage">
       <div class="home-stage-copy">
         <span class="scene-kicker">${district.name.toUpperCase()} · LEVEL ${state.level}</span>
@@ -382,7 +437,7 @@ function cbxShowActionReport(report){
   layer.setAttribute('role','dialog');
   layer.setAttribute('aria-modal','true');
   layer.setAttribute('aria-label',report.title);
-  layer.innerHTML=`<div class="report-wipe"></div><section class="action-report">
+  layer.innerHTML=`<section class="action-report">
     <div class="report-icon">${icon(report.icon||'sparkles')}</div>
     <span class="report-kicker">${report.kicker||'SHOP UPDATE'}</span>
     <h2>${report.title}</h2>
@@ -440,7 +495,8 @@ function cbxBuildActionReport(action,before,context={}){
   if(action==='challenge'){
     const labels={latte:['palette','Latte art results are in'],speed:['timer','The speed round is over'],crate:['package-search','The crate is open']};
     const [iconName,title]=labels[context.type]||['trophy','Event complete'];
-    const newest=state.feed?.[0]?.text||'You walked away with something useful.';
+    const found=items.filter(item=>(state.inventory[item.id]||0)>(before.inventory[item.id]||0));
+    const newest=context.type==='crate'?(found.length?`Inside: ${found.map(item=>item.name).join(', ')}. Your gear is already on the shelf.`:`Inside: ${formatMoney(Math.max(0,cashDelta))}. It is already in the till.`):context.type==='speed'?'The round is finished. Your XP and any restored Energy are shown below.':'The judges have finished scoring your pour. Your prize is shown below.';
     return {tone:'xp',icon:iconName,kicker:'EVENT COMPLETE',title,copy:newest,tokens:common,button:'BACK TO THE FLOOR'};
   }
   if(action==='collection'&&state.collectionsClaimed.length>before.collectionsClaimed.length){
