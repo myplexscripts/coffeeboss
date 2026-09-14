@@ -25,9 +25,7 @@ function renderStats(){
   const skill=document.getElementById('skillBadge'); skill.textContent=state.skillPoints; skill.classList.toggle('show',state.skillPoints>0);
   const cb=document.getElementById('challengeBadge'); cb.textContent=state.challengeTokens; cb.classList.toggle('show',state.challengeTokens>0);
 }
-function pageHead(eyebrow,title,subtitle,action=''){
-  return `<div class="page-head"><div><p class="eyebrow">${eyebrow}</p><h1>${title}</h1><p class="page-subtitle">${subtitle}</p></div>${action}</div>`;
-}
+function pageHead(){ return ''; }
 function renderHome(){
   const income=totalIncomePerTick();
   const district=districts.find(d=>d.id===state.district);
