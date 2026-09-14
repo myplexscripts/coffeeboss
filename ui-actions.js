@@ -1,7 +1,25 @@
 'use strict';
 
 function resourceSnapshot(){
-  return {cash:state.cash,xp:state.xp,energy:state.energy,drive:state.drive,morale:state.morale,level:state.level};
+  return {
+    cash:state.cash,
+    xp:state.xp,
+    energy:state.energy,
+    drive:state.drive,
+    morale:state.morale,
+    level:state.level,
+    bossPoints:state.bossPoints,
+    skillPoints:state.skillPoints,
+    crewLength:state.crew.length,
+    rivalsBeaten:state.rivalsBeaten,
+    rivalLosses:state.rivalLosses,
+    locationsBought:state.locationsBought,
+    owned:{...state.owned},
+    inventory:{...state.inventory},
+    bossDamage:{...state.bossDamage},
+    defeatedBosses:[...state.defeatedBosses],
+    collectionsClaimed:[...state.collectionsClaimed]
+  };
 }
 function pulseHud(id,spent=false){
   const el=document.getElementById(id);
@@ -19,7 +37,7 @@ function rewardBurst(parts){
   document.body.appendChild(el);
   setTimeout(()=>el.remove(),1550);
 }
-function afterActionFeedback(before){
+function afterActionFeedback(before,context=null){
   const parts=[];
   const deltaCash=state.cash-before.cash;
   const deltaXp=state.level===before.level?state.xp-before.xp:state.xp;
@@ -33,7 +51,9 @@ function afterActionFeedback(before){
   if(deltaEnergy!==0){ pulseHud('energyHud',deltaEnergy<0); parts.push({text:`${deltaEnergy>0?'+':''}${deltaEnergy} Energy`,type:'energy'}); }
   if(deltaDrive!==0){ pulseHud('driveHud',deltaDrive<0); parts.push({text:`${deltaDrive>0?'+':''}${deltaDrive} Drive`,type:'drive'}); }
   if(deltaMorale!==0){ pulseHud('moraleHud',deltaMorale<0); parts.push({text:`${deltaMorale>0?'+':''}${deltaMorale} Morale`,type:'morale'}); }
-  rewardBurst(parts);
+  const report=context&&typeof cbxBuildActionReport==='function'?cbxBuildActionReport(context.action,before,context):null;
+  if(report&&typeof cbxShowActionReport==='function') cbxShowActionReport(report);
+  else rewardBurst(parts);
 }
 
 function bindPageActions(){
@@ -43,23 +63,37 @@ function bindPageActions(){
     if(a==='tab'){ currentTab=el.dataset.tab; render(); return; }
 
     const before=resourceSnapshot();
-    if(a==='shift') performShift(el.dataset.id);
-    if(a==='location') buyLocation(el.dataset.id);
-    if(a==='buy-item') buyItem(el.dataset.id);
-    if(a==='sell-item') sellItem(el.dataset.id);
-    if(a==='recruit') recruitCrew();
-    if(a==='rival') challengeRival(Number(el.dataset.index));
-    if(a==='boss') bossAttack(el.dataset.id,el.dataset.power==='1');
-    if(a==='heal') heal();
-    if(a==='boss-point') useBossPoint(el.dataset.type);
-    if(a==='skill') addSkill(el.dataset.stat);
-    if(a==='challenge') runChallenge(el.dataset.type);
-    if(a==='collection') claimCollection(el.dataset.id);
-    if(a==='transfer'){
-      const input=document.getElementById(el.dataset.direction==='deposit'?'depositAmount':'withdrawAmount');
-      transferReserve(el.dataset.direction,input.value);
+    const context={
+      action:a,
+      id:el.dataset.id,
+      name:el.dataset.name,
+      type:el.dataset.type,
+      stat:el.dataset.stat,
+      direction:el.dataset.direction,
+      index:el.dataset.index
+    };
+    window.cbxActionInFlight=true;
+    try{
+      if(a==='shift') performShift(el.dataset.id);
+      if(a==='location') buyLocation(el.dataset.id);
+      if(a==='buy-item') buyItem(el.dataset.id);
+      if(a==='sell-item') sellItem(el.dataset.id);
+      if(a==='recruit') recruitCrew();
+      if(a==='rival') challengeRival(Number(el.dataset.index));
+      if(a==='boss') bossAttack(el.dataset.id,el.dataset.power==='1');
+      if(a==='heal') heal();
+      if(a==='boss-point') useBossPoint(el.dataset.type);
+      if(a==='skill') addSkill(el.dataset.stat);
+      if(a==='challenge') runChallenge(el.dataset.type);
+      if(a==='collection') claimCollection(el.dataset.id);
+      if(a==='transfer'){
+        const input=document.getElementById(el.dataset.direction==='deposit'?'depositAmount':'withdrawAmount');
+        transferReserve(el.dataset.direction,input.value);
+      }
+    } finally {
+      window.cbxActionInFlight=false;
     }
-    requestAnimationFrame(()=>afterActionFeedback(before));
+    requestAnimationFrame(()=>afterActionFeedback(before,context));
   }));
 }
 function navigate(page){ currentPage=page; currentTab=null; render(); window.scrollTo({top:0,behavior:'smooth'}); }
