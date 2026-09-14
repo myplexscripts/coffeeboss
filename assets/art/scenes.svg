@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .o{stroke:#11100e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+    .ol{stroke:#11100e;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+    .ink{fill:#11100e}.cream{fill:#f6e7c8}.paper{fill:#fff8e7}.green{fill:#214f3f}.green2{fill:#15382f}.tan{fill:#c98b56}.brown{fill:#8a5536}.gold{fill:#e9b657}.pink{fill:#e890a9}.rust{fill:#c7684f}.blue{fill:#7bc8e6}.char{fill:#171a1f}.mint{fill:#78a889}
+  </style>
+  <defs>
+    <g id="pendant">
+      <path d="M0 0V34" class="o" fill="none"/>
+      <path d="M-30 34h60l-10 28h-40z" class="green2 o"/>
+      <path d="M-18 57h36" stroke="#e9b657" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g id="plant">
+      <rect x="-18" y="0" width="36" height="28" rx="5" class="paper o"/>
+      <path d="M0 1C-4-24-25-28-28-13C-25 1-9 5 0 1ZM0 1C5-28 27-29 30-12C27 2 10 5 0 1ZM0 1C1-21 3-35 15-42C22-26 15-9 0 1Z" class="mint o"/>
+    </g>
+    <g id="mug">
+      <path d="M0 0h42v34c0 17-9 26-21 26S0 51 0 34z" class="paper o"/>
+      <path d="M42 10h10c18 0 18 28 0 28h-10" fill="none" class="o"/>
+      <path d="M8 7h26" stroke="#8a5536" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g id="takeaway">
+      <path d="M0 6h34l-4 48H4z" class="paper o"/>
+      <path d="M-2 6h38" class="o" fill="none"/>
+      <rect x="4" y="24" width="26" height="14" class="tan"/>
+    </g>
+    <g id="espresso">
+      <rect width="210" height="104" rx="14" class="green2 o"/>
+      <rect x="18" y="16" width="174" height="30" rx="7" class="paper o"/>
+      <circle cx="52" cy="31" r="7" class="gold o"/>
+      <circle cx="105" cy="31" r="7" class="gold o"/>
+      <circle cx="158" cy="31" r="7" class="gold o"/>
+      <path d="M58 56v38M152 56v38M42 64H18M168 64h24" class="o" fill="none"/>
+      <rect x="72" y="64" width="66" height="11" rx="5" class="brown"/>
+    </g>
+    <g id="bag">
+      <path d="M0 8h44l-3 54H3z" class="tan o"/>
+      <path d="M3 8h38" class="o" fill="none"/>
+      <path d="M17 36c10-13 16 1 7 11c-10-5-12-8-7-11z" class="brown ol"/>
+    </g>
+    <g id="box">
+      <rect width="64" height="46" rx="4" class="tan o"/>
+      <path d="M0 14h64M32 0v14" class="ol" fill="none"/>
+    </g>
+    <g id="pastry-case">
+      <path d="M0 30c0-16 12-30 28-30h154c16 0 28 14 28 30v88H0z" fill="#eaf6f6" class="o"/>
+      <path d="M0 55h210M0 87h210" class="ol" fill="none"/>
+      <path d="M18 45q15-25 30 0q15-25 30 0" fill="#e9b657" class="ol"/>
+      <circle cx="130" cy="40" r="13" class="tan ol"/>
+      <circle cx="168" cy="40" r="13" class="brown ol"/>
+      <path d="M24 78h28l6 18H18zM83 76h28l6 20H77z" class="rust ol"/>
+      <path d="M138 76h42v20h-42z" class="gold ol"/>
+    </g>
+    <g id="person-a">
+      <path d="M-42 74Q0 48 42 74l6 72h-96z" class="green o"/>
+      <ellipse cx="0" cy="0" rx="38" ry="44" fill="#8f563f" class="o"/>
+      <path d="M-36-16Q-18-47 12-39Q36-41 39-11Q16-25-6-23Q-23-21-36-16z" class="char o"/>
+      <circle cx="-13" cy="-3" r="4" class="ink"/><circle cx="13" cy="-3" r="4" class="ink"/>
+      <path d="M0 4q7 6 0 12" class="ol" fill="none"/>
+      <path d="M-13 23Q0 34 13 23" class="ol" fill="none"/>
+    </g>
+    <g id="person-b">
+      <path d="M-42 74Q0 48 42 74l6 72h-96z" class="green o"/>
+      <ellipse cx="0" cy="0" rx="38" ry="44" fill="#d9956b" class="o"/>
+      <path d="M-40-19Q-18-50 10-38Q35-46 40-13Q20-26 0-22Q-21-18-40-19z" class="brown o"/>
+      <circle cx="-13" cy="-3" r="4" class="ink"/><path d="M7-4q7-5 13 1" class="ol" fill="none"/>
+      <path d="M0 4q7 6 0 12" class="ol" fill="none"/>
+      <path d="M-16 21Q0 37 17 21Q0 27-16 21z" class="pink o"/>
+    </g>
+    <g id="person-c">
+      <path d="M-42 74Q0 48 42 74l6 72h-96z" class="green o"/>
+      <ellipse cx="0" cy="0" rx="38" ry="44" fill="#6f402d" class="o"/>
+      <path d="M-40-12Q-33-48-2-46Q29-51 40-10Q17-28-7-22Q-27-17-40-12z" class="ink o"/>
+      <path d="M-18-2q8-6 15 0M5-2q8-6 15 0" class="ol" fill="none"/>
+      <path d="M0 4q7 6 0 12" class="ol" fill="none"/>
+      <path d="M-13 24q13 9 26 0" class="ol" fill="none"/>
+    </g>
+    <g id="person-d">
+      <path d="M-42 74Q0 48 42 74l6 72h-96z" class="green o"/>
+      <ellipse cx="0" cy="0" rx="38" ry="44" fill="#f0b98a" class="o"/>
+      <path d="M-39-13Q-20-49 10-40Q36-43 40-9Q20-27-2-22Q-22-19-39-13z" fill="#e8cf75" class="o"/>
+      <circle cx="-13" cy="-3" r="4" class="ink"/><circle cx="13" cy="-3" r="4" class="ink"/>
+      <path d="M0 4q7 6 0 12" class="ol" fill="none"/>
+      <ellipse cx="0" cy="26" rx="10" ry="8" class="ink"/>
+    </g>
+  </defs>
+
+  <symbol id="home" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#f3e2bf"/>
+    <rect y="250" width="1200" height="110" fill="#8a5536"/>
+    <rect x="0" y="0" width="250" height="250" fill="#7bc8e6"/>
+    <path d="M0 150Q70 95 140 150T280 150V250H0z" fill="#78a889"/>
+    <use href="#pendant" x="330" y="0"/><use href="#pendant" x="865" y="0"/>
+    <rect x="365" y="34" width="370" height="70" rx="8" class="green2 o"/>
+    <path d="M405 69h90M540 69h70M650 69h42" stroke="#f6e7c8" stroke-width="8" stroke-linecap="round"/>
+    <rect x="780" y="38" width="270" height="92" rx="8" class="green2 o"/>
+    <path d="M820 66h70M820 92h160" stroke="#f6e7c8" stroke-width="8" stroke-linecap="round"/>
+    <use href="#espresso" x="330" y="132"/>
+    <use href="#pastry-case" x="795" y="118"/>
+    <use href="#person-a" x="610" y="148" transform="scale(.78) translate(170 42)"/>
+    <g transform="translate(615 120) scale(.78)"><use href="#person-b"/><path d="M-20 58l10 55h20l10-55" fill="#f6e7c8" class="o"/><use href="#mug" x="25" y="66" transform="scale(.7)"/></g>
+    <g transform="translate(1010 153) scale(.68)"><use href="#person-c"/><use href="#takeaway" x="-70" y="62" transform="scale(.72)"/></g>
+    <g transform="translate(160 215) scale(.72)"><use href="#person-d"/><use href="#mug" x="38" y="65" transform="scale(.55)"/></g>
+    <use href="#plant" x="1110" y="232"/><use href="#plant" x="70" y="280" transform="scale(1.1)"/>
+  </symbol>
+
+  <symbol id="shifts" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#efe0bd"/>
+    <rect y="274" width="1200" height="86" class="brown"/>
+    <use href="#pendant" x="250" y="0"/><use href="#pendant" x="620" y="0"/><use href="#pendant" x="995" y="0"/>
+    <use href="#espresso" x="390" y="145"/>
+    <rect x="40" y="55" width="285" height="105" rx="10" class="green2 o"/>
+    <circle cx="85" cy="102" r="18" class="paper ol"/><path d="M75 102h20M85 92v20" class="ol" fill="none"/>
+    <path d="M125 83h150M125 112h115M125 138h90" stroke="#f6e7c8" stroke-width="8" stroke-linecap="round"/>
+    <g transform="translate(245 185) scale(.66)"><use href="#person-a"/><path d="M32 78h48v64H32z" class="paper o"/><path d="M41 94h30M41 112h23" class="ol" fill="none"/></g>
+    <g transform="translate(610 160) scale(.7)"><use href="#person-b"/><use href="#mug" x="28" y="72" transform="scale(.58)"/></g>
+    <g transform="translate(845 187) scale(.66)"><use href="#person-c"/><use href="#takeaway" x="38" y="70" transform="scale(.7)"/></g>
+    <g transform="translate(1050 205) scale(.58)"><use href="#person-d"/></g>
+    <path d="M760 74h64l8 50h-80z" class="paper o"/><path d="M776 88h31M774 105h37" class="ol" fill="none"/>
+    <path d="M870 73h64l8 50h-80z" class="paper o"/><path d="M886 88h31M884 105h37" class="ol" fill="none"/>
+  </symbol>
+
+  <symbol id="rivals" viewBox="0 0 1200 360">
+    <rect width="600" height="360" fill="#8dd0ec"/><rect x="600" width="600" height="360" fill="#d9564f"/>
+    <path d="M0 260Q80 190 160 250T330 245T500 250V360H0z" fill="#78a889"/>
+    <path d="M760 250Q835 205 910 250T1060 245T1200 250V360H600z" fill="#7e3430"/>
+    <g transform="translate(60 82)"><rect width="360" height="210" rx="8" class="paper o"/><path d="M0 68h360v52H0z" class="green o"/><path d="M0 68l45 52 45-52 45 52 45-52 45 52 45-52 45 52 45-52" fill="#fff8e7" stroke="#11100e" stroke-width="5"/><rect x="55" y="144" width="108" height="148" class="green o"/><rect x="198" y="145" width="120" height="90" class="blue o"/><circle cx="180" cy="25" r="34" class="paper o"/><path d="M162 29q18-26 36 0q-12-8-18 15q-5-22-18-15z" class="green ol"/></g>
+    <g transform="translate(780 82)"><rect width="360" height="210" rx="8" fill="#23252a" class="o"/><path d="M0 68h360v52H0z" fill="#b83d3f" class="o"/><path d="M0 68l45 52 45-52 45 52 45-52 45 52 45-52 45 52 45-52" fill="#171a1f" stroke="#11100e" stroke-width="5"/><rect x="54" y="144" width="108" height="148" fill="#6d292c" class="o"/><rect x="198" y="145" width="120" height="90" fill="#79292e" class="o"/><circle cx="180" cy="25" r="34" fill="#171a1f" class="o"/><path d="M163 16q17 10 34 0q-9 13-17 27q-7-14-17-27z" fill="#d9564f" class="ol"/></g>
+    <path d="M552 120l48-76l48 76l76-48l-26 86l87 3l-77 46l52 70l-87-21l-11 89l-43-79l-65 60l14-89l-89 13l67-59l-80-39l89-14l-22-86z" fill="#e9b657" class="o"/>
+    <g transform="translate(500 135) rotate(-14)"><use href="#mug"/></g><g transform="translate(645 135) rotate(14)"><use href="#mug"/></g>
+    <path d="M560 120q15-38 30-12M650 114q18-35 33-10" class="brown o" fill="none"/>
+  </symbol>
+
+  <symbol id="locations" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#84cceb"/><rect y="300" width="1200" height="60" fill="#d8c7aa"/>
+    <path d="M0 110q45-55 90 0q48-60 96 0" fill="#fff8e7"/><path d="M450 82q45-55 90 0q48-60 96 0" fill="#fff8e7"/><path d="M880 96q45-55 90 0q48-60 96 0" fill="#fff8e7"/>
+    <g transform="translate(38 150)"><rect x="20" y="70" width="180" height="80" class="paper o"/><path d="M10 45h200v40H10z" class="brown o"/><path d="M10 45l25 40 25-40 25 40 25-40 25 40 25-40 25 40 25-40 20 40" fill="#fff8e7" stroke="#11100e" stroke-width="5"/><circle cx="64" cy="160" r="22" fill="#4a4d53" class="o"/><circle cx="168" cy="160" r="22" fill="#4a4d53" class="o"/><use href="#takeaway" x="92" y="87" transform="scale(.62)"/></g>
+    <path d="M260 224h60" stroke="#fff8e7" stroke-width="16" stroke-linecap="round"/><path d="M302 202l23 22-23 22" fill="none" stroke="#fff8e7" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(335 116)"><rect x="0" y="60" width="205" height="124" class="paper o"/><path d="M0 45h205v45H0z" class="green o"/><rect x="62" y="95" width="82" height="89" class="green2 o"/><circle cx="103" cy="24" r="30" class="paper o"/><path d="M89 27q14-21 29 0q-10-6-15 13q-4-17-14-13z" class="brown ol"/></g>
+    <path d="M553 224h60" stroke="#fff8e7" stroke-width="16" stroke-linecap="round"/><path d="M595 202l23 22-23 22" fill="none" stroke="#fff8e7" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(625 82)"><rect x="0" y="60" width="245" height="158" class="paper o"/><path d="M0 60h245v52H0z" class="brown o"/><path d="M0 60l31 52 31-52 31 52 31-52 31 52 31-52 31 52 28-52" fill="#fff8e7" stroke="#11100e" stroke-width="5"/><rect x="30" y="130" width="68" height="88" class="blue o"/><rect x="125" y="130" width="88" height="70" class="blue o"/></g>
+    <path d="M884 224h60" stroke="#fff8e7" stroke-width="16" stroke-linecap="round"/><path d="M926 202l23 22-23 22" fill="none" stroke="#fff8e7" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    <g transform="translate(965 42)"><rect x="0" y="75" width="205" height="210" class="paper o"/><rect x="38" y="0" width="129" height="95" class="paper o"/><rect x="35" y="137" width="60" height="148" class="blue o"/><rect x="112" y="137" width="60" height="148" class="blue o"/><rect x="22" y="116" width="160" height="26" class="green2 o"/><use href="#plant" x="18" y="250" transform="scale(.75)"/><use href="#plant" x="185" y="250" transform="scale(.75)"/></g>
+  </symbol>
+
+  <symbol id="stockroom" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#ddd2c2"/>
+    <g class="o" fill="#73777d"><rect x="28" y="24" width="340" height="300"/><path d="M28 105h340M28 190h340M28 270h340" fill="none"/><rect x="410" y="24" width="340" height="300"/><path d="M410 105h340M410 190h340M410 270h340" fill="none"/><rect x="1000" y="24" width="172" height="300"/><path d="M1000 120h172M1000 220h172" fill="none"/></g>
+    <g transform="translate(46 38)"><use href="#bag"/><use href="#bag" x="62"/><use href="#bag" x="124"/><use href="#bag" x="186"/><use href="#bag" x="248"/></g>
+    <g transform="translate(48 123)"><rect width="38" height="60" rx="8" class="gold o"/><rect x="50" width="38" height="60" rx="8" class="rust o"/><rect x="100" width="38" height="60" rx="8" class="tan o"/><rect x="150" width="38" height="60" rx="8" class="brown o"/><rect x="200" width="38" height="60" rx="8" class="cream o"/></g>
+    <g transform="translate(48 208)"><path d="M0 0h50v48H0zM62 0h50v48H62zM124 0h50v48h-50z" class="paper o"/><path d="M200 0h42v48h-42zM252 0h42v48h-42z" class="char o"/></g>
+    <g transform="translate(434 38)"><rect width="90" height="50" rx="6" class="paper o"/><rect x="110" width="90" height="50" rx="6" class="paper o"/><rect x="220" width="90" height="50" rx="6" class="paper o"/><path d="M15 16h60M15 30h48M125 16h60M125 30h48M235 16h60M235 30h48" class="ol" fill="none"/></g>
+    <g transform="translate(440 120)"><rect width="62" height="64" rx="6" class="char o"/><circle cx="31" cy="28" r="16" class="brown o"/><rect x="88" y="14" width="50" height="50" rx="8" class="paper o"/><rect x="162" y="8" width="46" height="58" rx="8" fill="#cfd3d6" class="o"/><rect x="234" y="4" width="50" height="62" rx="8" class="paper o"/></g>
+    <g transform="translate(430 209)"><use href="#box"/><use href="#box" x="86"/><use href="#box" x="172"/><use href="#box" x="258"/></g>
+    <rect x="786" y="40" width="185" height="284" rx="8" class="brown o"/><rect x="813" y="96" width="130" height="72" rx="8" class="paper o"/><path d="M835 118h86M835 144h64" class="ol" fill="none"/>
+    <rect x="1008" y="37" width="150" height="170" rx="8" fill="#d9eef4" class="o"/><path d="M1008 95h150M1008 150h150" class="ol" fill="none"/><path d="M1035 55h30l-3 33h-24zM1090 55h30l-3 33h-24zM1032 111h34l-3 31h-28zM1090 111h34l-3 31h-28z" class="paper ol"/>
+    <g transform="translate(1018 238)"><use href="#box"/><use href="#box" x="76"/></g>
+  </symbol>
+
+  <symbol id="crew" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#f0dfbd"/><rect y="287" width="1200" height="73" class="brown"/>
+    <path d="M0 92h1200" stroke="#c98b56" stroke-width="14"/>
+    <g transform="translate(135 170) scale(.78)"><use href="#person-d"/><path d="M-68 70h45" stroke="#11100e" stroke-width="8"/><use href="#mug" x="-98" y="55" transform="scale(.55)"/></g>
+    <g transform="translate(355 168) scale(.78)"><use href="#person-c"/><rect x="28" y="60" width="54" height="72" rx="6" class="tan o"/><path d="M39 82h32M39 102h24" class="ol" fill="none"/></g>
+    <g transform="translate(585 170) scale(.78)"><use href="#person-a"/><use href="#mug" x="45" y="64" transform="scale(.56)"/><path d="M42 50q20-24 36-4" stroke="#cfd3d6" stroke-width="10" stroke-linecap="round" fill="none"/></g>
+    <g transform="translate(810 170) scale(.78)"><use href="#person-b"/><path d="M45 62q28 0 38 28q-25 18-55 0q3-20 17-28z" class="paper o"/><circle cx="43" cy="102" r="15" class="pink ol"/></g>
+    <g transform="translate(1035 168) scale(.78)"><use href="#person-d"/><use href="#box" x="45" y="54" transform="scale(.75)"/><use href="#box" x="55" y="90" transform="scale(.75)"/></g>
+    <use href="#plant" x="75" y="278"/><use href="#plant" x="1125" y="278"/>
+  </symbol>
+
+  <symbol id="challenges" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#efd9b3"/><rect y="286" width="1200" height="74" class="brown"/>
+    <use href="#pendant" x="260" y="0"/><use href="#pendant" x="930" y="0"/>
+    <g transform="translate(335 175) scale(.85)"><use href="#person-c"/><use href="#mug" x="48" y="67" transform="scale(.6)"/><path d="M16 59q42-30 60 0" stroke="#cfd3d6" stroke-width="10" stroke-linecap="round" fill="none"/></g>
+    <g transform="translate(865 175) scale(.85)"><use href="#person-d"/><use href="#mug" x="48" y="67" transform="scale(.6)"/><path d="M16 59q42-30 60 0" stroke="#cfd3d6" stroke-width="10" stroke-linecap="round" fill="none"/></g>
+    <g transform="translate(600 155) scale(.72)"><use href="#person-b"/><rect x="-32" y="62" width="64" height="76" rx="6" class="tan o"/><path d="M-16 86h32M-16 106h24" class="ol" fill="none"/></g>
+    <g transform="translate(120 118) scale(.48)"><use href="#person-a"/></g><g transform="translate(1080 118) scale(.48)"><use href="#person-c"/></g><g transform="translate(190 108) scale(.44)"><use href="#person-d"/></g><g transform="translate(1010 108) scale(.44)"><use href="#person-b"/></g>
+    <path d="M525 54h150v52H525z" class="green2 o"/><path d="M555 80h90" stroke="#f6e7c8" stroke-width="8" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="breakroom" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#e7d7c5"/>
+    <rect x="0" y="0" width="220" height="360" fill="#72777c"/>
+    <path d="M55 0v360M110 0v360M165 0v360M0 118h220M0 238h220" class="ol" fill="none"/>
+    <rect x="248" y="180" width="380" height="140" rx="35" class="rust o"/><rect x="655" y="180" width="245" height="140" rx="35" class="green o"/>
+    <rect x="460" y="45" width="300" height="120" rx="8" class="tan o"/><rect x="492" y="75" width="60" height="48" class="pink o"/><rect x="575" y="68" width="70" height="55" class="gold o"/><rect x="670" y="84" width="54" height="40" class="mint o"/>
+    <rect x="942" y="0" width="258" height="180" class="blue o"/><circle cx="1090" cy="65" r="35" class="gold"/><path d="M945 158q55-68 110 0q60-70 120 0" class="mint"/>
+    <g transform="translate(360 185) scale(.74)"><use href="#person-b"/><use href="#mug" x="42" y="64" transform="scale(.55)"/></g>
+    <g transform="translate(595 180) scale(.74)"><use href="#person-c"/><use href="#mug" x="42" y="64" transform="scale(.55)"/></g>
+    <g transform="translate(790 185) scale(.74)"><use href="#person-d"/><circle cx="50" cy="76" r="18" class="tan o"/><circle cx="45" cy="70" r="3" class="brown"/><circle cx="55" cy="80" r="3" class="brown"/></g>
+    <ellipse cx="590" cy="315" rx="180" ry="34" class="tan o"/><use href="#plant" x="1000" y="288" transform="scale(1.2)"/>
+  </symbol>
+
+  <symbol id="reserve" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#ecd9b8"/><rect y="238" width="1200" height="122" class="brown"/>
+    <rect x="80" y="70" width="330" height="160" rx="10" class="tan o"/><rect x="108" y="96" width="120" height="96" class="paper o"/><path d="M132 122h72M132 148h58M132 174h48" class="ol" fill="none"/><rect x="255" y="96" width="125" height="96" class="paper o"/><path d="M278 170v-24h22v24M310 170v-44h22v44M342 170v-70h22v70" class="green o"/>
+    <rect x="475" y="204" width="170" height="92" rx="12" class="green2 o"/><circle cx="560" cy="250" r="24" class="gold o"/><path d="M552 250q8-12 16 0q-5-4-8 9q-2-11-8-9z" class="ink"/>
+    <use href="#mug" x="700" y="228"/><path d="M815 255h150" stroke="#11100e" stroke-width="12" stroke-linecap="round"/>
+    <path d="M790 214h215l-16 96H806z" class="paper o"/><path d="M825 236h72M825 260h110M825 284h82" class="ol" fill="none"/>
+    <path d="M1030 126h78v76h-78z" class="gold o"/><path d="M1045 126q0-40 24-40t24 40M1046 202v25h46v-25" class="gold o" fill="none"/>
+    <use href="#plant" x="1125" y="260" transform="scale(1.2)"/>
+  </symbol>
+
+  <symbol id="profile" viewBox="0 0 1200 360">
+    <rect width="1200" height="360" fill="#e9dcc3"/>
+    <rect x="65" y="38" width="1070" height="284" rx="14" class="green2 o"/>
+    <rect x="100" y="75" width="270" height="210" rx="10" class="paper o"/>
+    <circle cx="235" cy="145" r="55" class="gold o"/><path d="M208 148q28-43 55 0q-19-13-28 28q-8-35-27-28z" class="green2 ol"/>
+    <path d="M140 230h190" stroke="#11100e" stroke-width="9" stroke-linecap="round"/>
+    <rect x="420" y="76" width="305" height="100" rx="10" class="paper o"/><circle cx="470" cy="126" r="22" class="gold o"/><circle cx="540" cy="126" r="22" class="pink o"/><circle cx="610" cy="126" r="22" class="blue o"/><circle cx="680" cy="126" r="22" class="mint o"/>
+    <rect x="420" y="205" width="305" height="80" rx="10" class="paper o"/><path d="M455 245h230" stroke="#11100e" stroke-width="10" stroke-linecap="round"/><path d="M480 245v-18M540 245v-35M600 245v-52M660 245v-72" class="green o" fill="none"/>
+    <path d="M830 210h95v55h-95z" class="gold o"/><path d="M842 210q0-55 36-55t36 55M845 265v30h66v-30" class="gold o" fill="none"/>
+    <g transform="translate(945 80)"><use href="#bag"/><use href="#bag" x="70" fill="#78a889"/><use href="#bag" x="140"/></g>
+  </symbol>
+</svg>
