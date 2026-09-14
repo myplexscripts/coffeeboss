@@ -1,0 +1,192 @@
+/* Prominent game-card icon art treatment.
+   Existing Lucide icons become miniature visual tiles rather than tiny utility glyphs. */
+
+:where(.job-icon,.rival-mark,.location-icon,.item-icon,.crew-avatar,.challenge-icon,.boss-icon,.money-icon,.upgrade-icon,.command-icon,.shop-mark,.crew-summary-icon){
+  --visual-accent:var(--coffee);
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  flex:0 0 auto;
+  border:1px solid color-mix(in srgb,var(--visual-accent) 30%,var(--line));
+  background:
+    linear-gradient(145deg,color-mix(in srgb,var(--visual-accent) 18%,#1b2230),#10151d 72%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    inset 0 -14px 24px rgba(0,0,0,.14),
+    0 7px 18px rgba(0,0,0,.12);
+  color:color-mix(in srgb,var(--visual-accent) 86%,white);
+}
+
+:where(.job-icon,.rival-mark,.location-icon,.item-icon,.crew-avatar,.challenge-icon,.boss-icon,.money-icon,.upgrade-icon,.command-icon,.shop-mark,.crew-summary-icon)::before{
+  content:"";
+  position:absolute;
+  z-index:-2;
+  width:72%;
+  aspect-ratio:1;
+  left:-19%;
+  top:-31%;
+  border-radius:50%;
+  background:color-mix(in srgb,var(--visual-accent) 18%,transparent);
+}
+
+:where(.job-icon,.rival-mark,.location-icon,.item-icon,.crew-avatar,.challenge-icon,.boss-icon,.money-icon,.upgrade-icon,.command-icon,.shop-mark,.crew-summary-icon)::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  right:8px;
+  bottom:8px;
+  width:22px;
+  height:5px;
+  border-radius:999px;
+  background:color-mix(in srgb,var(--visual-accent) 42%,transparent);
+  transform:rotate(-18deg);
+}
+
+:where(.job-icon,.rival-mark,.location-icon,.item-icon,.challenge-icon,.boss-icon,.money-icon,.upgrade-icon,.command-icon,.shop-mark,.crew-summary-icon)>svg{
+  position:relative;
+  z-index:2;
+  stroke-width:2.35;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.16));
+}
+
+.job-icon{--visual-accent:var(--coffee-2);width:72px;height:64px;border-radius:14px}
+.job-icon svg{width:30px;height:30px}
+.job-card{grid-template-columns:72px minmax(0,1fr) auto;gap:14px;padding:14px;min-height:94px}
+
+.rival-mark{--visual-accent:var(--drive);width:72px;height:64px;border-radius:14px}
+.rival-mark svg{width:30px;height:30px}
+.rival-top{grid-template-columns:72px minmax(0,1fr) auto;gap:13px}
+.rival-card{padding:15px}
+
+.location-icon{--visual-accent:var(--cash);width:76px;height:66px;border-radius:14px}
+.location-icon svg{width:31px;height:31px}
+.location-top{align-items:flex-start}
+.location-district{padding-top:7px}
+.location-tile{padding:15px;min-height:260px}
+.location-name{margin-top:14px;font-size:18px}
+.location-desc{min-height:42px}
+
+.item-icon{--visual-accent:var(--coffee-2);width:72px;height:64px;border-radius:14px}
+.item-icon svg{width:30px;height:30px}
+.rarity-uncommon .item-icon{--visual-accent:var(--good)}
+.rarity-rare .item-icon{--visual-accent:var(--energy)}
+.rarity-epic .item-icon{--visual-accent:var(--xp)}
+.rarity-legendary .item-icon{--visual-accent:var(--coffee)}
+.item-head{grid-template-columns:72px minmax(0,1fr) auto;gap:12px}
+.item-tile{padding:14px}
+
+.crew-avatar{--visual-accent:var(--quality);width:64px;height:64px;border-radius:15px;font-size:22px}
+.crew-row{grid-template-columns:64px minmax(0,1fr) auto auto;gap:13px;padding:13px 14px}
+.crew-summary-icon{--visual-accent:var(--quality);width:60px;height:54px;border-radius:13px}
+.crew-summary-icon svg{width:27px;height:27px}
+
+.challenge-icon{--visual-accent:var(--xp);width:72px;height:64px;border-radius:14px}
+.challenge-icon svg{width:30px;height:30px}
+.challenge-tile{grid-template-columns:72px minmax(0,1fr);gap:13px;padding:14px}
+
+.boss-icon{--visual-accent:var(--drive);width:72px;height:64px;border-radius:14px}
+.boss-icon svg{width:30px;height:30px}
+.boss-head{grid-template-columns:72px minmax(0,1fr) auto;gap:13px}
+.boss-tile{padding:15px}
+
+.money-icon{width:76px;height:66px;border-radius:14px;margin-bottom:16px}
+.money-icon.cash{--visual-accent:var(--cash)}
+.money-icon.xp{--visual-accent:var(--xp)}
+.money-icon svg{width:31px;height:31px}
+.money-panel{padding:18px}
+
+.upgrade-icon{width:68px;height:60px;border-radius:14px}
+.upgrade-icon svg{width:28px;height:28px}
+.upgrade-tile{grid-template-columns:68px minmax(0,1fr) auto 48px;gap:12px;padding:13px}
+.upgrade-tile.service .upgrade-icon{--visual-accent:var(--service)}
+.upgrade-tile.quality .upgrade-icon{--visual-accent:var(--quality)}
+.upgrade-tile.energy .upgrade-icon{--visual-accent:var(--energy)}
+.upgrade-tile.drive .upgrade-icon{--visual-accent:var(--drive)}
+.upgrade-tile.morale .upgrade-icon{--visual-accent:var(--morale)}
+
+.command-icon{width:56px;height:50px;border-radius:13px}
+.command-icon svg{width:25px;height:25px}
+.command-icon.energy{--visual-accent:var(--energy)}
+.command-icon.drive{--visual-accent:var(--drive)}
+.command-icon.cash{--visual-accent:var(--cash)}
+.command-icon.xp{--visual-accent:var(--xp)}
+.command-tile{grid-template-columns:56px minmax(0,1fr) 18px;gap:12px;min-height:72px;padding:10px 12px}
+
+.shop-mark{--visual-accent:var(--coffee-2);width:62px;height:56px;border-radius:14px}
+.shop-mark svg{width:27px;height:27px}
+.shop-strip{grid-template-columns:62px minmax(0,1fr) auto;gap:14px}
+
+/* The small stat cards still get a visual cue, but do not compete with real action cards. */
+.shop-stat{min-height:78px;padding-right:48px}
+.shop-stat svg{right:10px;bottom:10px;width:30px;height:30px;padding:6px;border-radius:9px;background:var(--panel-2);color:#8090a5;opacity:.9}
+
+/* Boss-point cards are buttons, so their icons get the same image-tile treatment without adding markup. */
+.boost-tile{min-height:118px;padding:12px 13px;justify-content:flex-start}
+.boost-tile>svg{box-sizing:content-box;width:26px;height:26px;margin:0 0 8px;padding:11px;border-radius:13px;border:1px solid var(--line);background:var(--panel-2)}
+.boost-tile.energy>svg{background:rgba(86,199,255,.09);border-color:rgba(86,199,255,.18)}
+.boost-tile.drive>svg{background:rgba(255,156,88,.09);border-color:rgba(255,156,88,.18)}
+.boost-tile.morale>svg{background:rgba(255,127,150,.09);border-color:rgba(255,127,150,.18)}
+.boost-tile.cash>svg{background:rgba(99,213,154,.09);border-color:rgba(99,213,154,.18)}
+
+/* Collection item icons behave like a row of tiny collectible thumbnails. */
+.collection-items{gap:7px;margin-top:12px}
+.collection-item{width:42px;height:42px;border-radius:10px}
+.collection-item svg{width:20px;height:20px}
+.collection-item.owned{box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 5px 12px rgba(0,0,0,.12)}
+
+/* Smaller cards around the home screen also get a stronger icon plate. */
+.milestone-panel .panel-label>svg,.unlock-panel .panel-label>svg,.activity-panel .panel-label>svg{
+  box-sizing:content-box;
+  width:18px;
+  height:18px;
+  padding:8px;
+  border-radius:10px;
+  background:var(--panel-3);
+  border:1px solid var(--line);
+  color:var(--coffee-2);
+}
+
+@media(max-width:720px){
+  .job-card{grid-template-columns:60px minmax(0,1fr);gap:11px;padding:12px}
+  .job-icon{width:60px;height:56px;border-radius:13px}
+  .job-icon svg{width:27px;height:27px}
+
+  .rival-top{grid-template-columns:62px minmax(0,1fr)}
+  .rival-mark{width:62px;height:58px}
+  .rival-mark svg{width:27px;height:27px}
+  .rival-top>.status-tag{grid-column:2;justify-self:start}
+
+  .location-icon{width:68px;height:60px}
+  .location-icon svg{width:28px;height:28px}
+
+  .item-head{grid-template-columns:64px minmax(0,1fr) auto}
+  .item-icon{width:64px;height:58px}
+  .item-icon svg{width:27px;height:27px}
+
+  .crew-row{grid-template-columns:58px minmax(0,1fr) auto;padding:12px}
+  .crew-avatar{width:58px;height:58px}
+  .crew-row .status-tag,.crew-number{grid-column:2/4}
+
+  .challenge-tile{grid-template-columns:62px minmax(0,1fr)}
+  .challenge-icon{width:62px;height:58px}
+  .challenge-icon svg{width:27px;height:27px}
+
+  .boss-head{grid-template-columns:62px minmax(0,1fr)}
+  .boss-icon{width:62px;height:58px}
+  .boss-icon svg{width:27px;height:27px}
+
+  .upgrade-tile{grid-template-columns:60px minmax(0,1fr) auto 46px;gap:9px}
+  .upgrade-icon{width:60px;height:56px}
+  .upgrade-icon svg{width:26px;height:26px}
+
+  .command-icon{width:52px;height:48px}
+  .command-tile{grid-template-columns:52px minmax(0,1fr) 18px}
+  .shop-strip{grid-template-columns:56px minmax(0,1fr)}
+  .shop-mark{width:56px;height:52px}
+}
+
+@media(max-width:420px){
+  .location-tile{padding:13px}
+  .upgrade-tile{grid-template-columns:56px minmax(0,1fr) auto 44px}
+  .upgrade-icon{width:56px;height:54px}
+}
