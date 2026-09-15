@@ -3,7 +3,7 @@
 // The shop is the hub. Workspaces open over it, keeping a place to return to.
 const shopPageNames={shifts:'At the counter',rivals:'Around the block',locations:'The neighbourhood',stockroom:'Behind the bar',crew:'Your crew',challenges:'The noticeboard',reserve:'The safe',breakroom:'Take five',profile:'The boss'};
 function shopAvatar(seed='Felix'){
-  return `<img class="micah-avatar" src="https://api.dicebear.com/10.x/micah/svg?seed=${encodeURIComponent(seed).replace(/'/g,'%27')}" width="96" height="96" alt="" decoding="async">`;
+  return `<img class="micah-avatar" src="https://api.dicebear.com/10.x/micah/svg?seed=${encodeURIComponent(seed).replace(/'/g,'%27')}&amp;mouth=smile,laughing,smirk&amp;eyes=eyes,round,smiling" width="96" height="96" alt="" decoding="async">`;
 }
 function shopRoom(interactive=true){
   const spot=(page,cls,label,detail)=>interactive?`<button class="shop-spot ${cls}" data-action="nav" data-page="${page}"><span>${label}</span><small>${detail}</small>${icon('arrow-up-right')}</button>`:'';
@@ -41,7 +41,7 @@ cbxSceneIntro=function(scene,extras=''){
     locations:['A little shop. A bigger town.','Each spot earns cash every minute. Open one, then expand when you can afford it.'],
     stockroom:['Make every cup count','Buy gear once. Your best pieces work automatically, with slots supplied by your crew.'],
     crew:['Room for one more','Each hire adds power and another gear slot.'],
-    challenges:['Make a name for yourself','Side events use tokens. Major challenges use Drive, and each push keeps your progress.'],
+    challenges:['Make a name for yourself','Side events use challenge tokens. Major challenges use Drive, and progress is saved after every attempt.'],
     reserve:['Keep a little tucked away','Rivals can take cash from the till. Money in the safe stays yours.'],
     breakroom:['The next rush can wait','Restore Morale here before facing more pressure.'],
     profile:['Your kind of boss','Spend skill points to improve the way you like to play.']

@@ -6,7 +6,7 @@ function cbxResourceGuide(scene){
   const moraleSeconds=state.bossStyle==='competitor'?90:120;
   const entries={
     energy:['zap','Energy',`Your shift budget. Each shift costs Energy, so choose work you can afford. It returns automatically: 1 every ${energySeconds} seconds, up to your maximum.`],
-    drive:['flame','Drive',`Your challenge budget. Rivals cost 1; major challenges cost 1 or 3 per push. It returns automatically: 1 every ${driveSeconds} seconds.`],
+    drive:['flame','Drive',`Your challenge budget. Rivals cost 1; major challenges cost 1 for a standard attempt or 3 for a full effort. It returns automatically: 1 every ${driveSeconds} seconds.`],
     morale:['heart-pulse','Morale',`How much pressure your crew can take. Rival and major challenges wear it down. You need at least 8 for rivals and 10 for major challenges. It also affects shift performance. Recover in the Break Room or wait: 1 returns every ${moraleSeconds} seconds.`]
   };
   const keys=scene==='shifts'?['energy','morale']:['rivals','challenges'].includes(scene)?['drive','morale']:scene==='home'||scene==='breakroom'?Object.keys(entries):[];
@@ -250,7 +250,7 @@ renderShifts=function(){
         const unlocked=state.level>=s.level;
         const mastery=state.shiftMastery[s.id]||0;
         const affordable=state.energy>=s.energy;
-        const buttonLabel=!unlocked?`LEVEL ${s.level}`:!affordable?'NEED ENERGY':'SIZE UP SHIFT';
+        const buttonLabel=!unlocked?`LEVEL ${s.level}`:!affordable?'NEED ENERGY':'SERVE THIS BATCH';
         return `<article class="mission ${!unlocked?'locked':''}">
           <span class="mission-number">${String(index+1).padStart(2,'0')}</span>
           <div class="mission-art">${icon(s.icon)}<span>${cbxMasteryLabel(mastery)}</span></div>
@@ -358,8 +358,8 @@ function cbxBossStage(b){
   return `<article class="boss-stage ${defeated?'defeated':''}">
     <div class="boss-stage-art">${icon(b.icon)}<span>${defeated?'CLEARED':unlocked?'READY':`LEVEL ${b.level}`}</span></div>
     <div class="boss-stage-copy"><span>MAJOR CHALLENGE</span><h2>${b.name}</h2><p>${b.description}</p><div class="boss-rewards">${cbResourceChip('cash','banknote','Reward',formatMoney(b.reward))}${cbResourceChip('xp','sparkles','XP',b.xp)}</div></div>
-    <div class="boss-stage-pressure"><div><span>${defeated?'PRESSURE CLEARED':'PRESSURE LEFT'}</span><strong>${defeated?'DONE':remain}</strong></div><div class="pressure-track"><span style="width:${pct}%"></span></div>
-      ${unlocked&&!defeated?`<div class="boss-stage-actions"><button data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="0" ${state.drive<1||state.morale<10?'disabled':''}>PUSH <span>1 Drive</span></button><button class="power" data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="1" ${state.drive<3||state.morale<10?'disabled':''}>POWER PUSH <span>3 Drive</span></button></div>`:''}
+    <div class="boss-stage-pressure"><div><span>${defeated?'CHALLENGE COMPLETE':'WORK REMAINING'}</span><strong>${defeated?'DONE':remain}</strong></div><div class="pressure-track"><span style="width:${pct}%"></span></div>
+      ${unlocked&&!defeated?`<p class="challenge-instructions">Complete this challenge over several attempts. Each attempt reduces what is left. A full effort makes about 2.65× the progress, but wears down more Morale. You need at least 10 Morale to attempt either.</p><div class="boss-stage-actions"><button data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="0" ${state.drive<1||state.morale<10?'disabled':''}>STANDARD ATTEMPT <span>1 Drive</span></button><button class="power" data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="1" ${state.drive<3||state.morale<10?'disabled':''}>FULL EFFORT <span>3 Drive</span></button></div>`:''}
     </div>
   </article>`;
 }
@@ -370,7 +370,7 @@ renderChallenges=function(){
   return `<div class="scene-screen challenges-scene">
     ${cbxSceneIntro('challenges',extras)}
     <section class="event-marquee">${cbxChallenge('latte','palette','Latte Art Throwdown','Make something worth putting on the counter, then hope the judges agree.','Cash and XP')}${cbxChallenge('speed','timer','Speed Service Round','A short, frantic run where every second matters.','XP and Energy')}${cbxChallenge('crate','package-search','Mystery Supply Crate','You will leave with cash or a new piece of gear.','Cash or gear')}</section>
-    <div class="chapter-break"><span>THE BIG TESTS</span><p>These do not reset. Every push gets you closer.</p></div>
+    <div class="chapter-break"><span>THE BIG TESTS</span><p>Progress is saved. Every attempt gets you closer to completing the challenge.</p></div>
     <section class="boss-run">${active.length?active.map(cbxBossStage).join(''):`<div class="locked-challenge">${icon('lock-keyhole')}<h2>Your first major challenge arrives at Level 4</h2><p>Keep working. Word about the shop is starting to travel.</p></div>`}</section>
   </div>`;
 };
