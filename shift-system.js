@@ -31,22 +31,28 @@ function coffeeShiftWeight(shift){
 
 function coffeePlayerTraits(shift){
   const mastery = state.shiftMastery[shift.id] || 0;
+  const level=Math.max(0,state.level-1);
+  const service=Math.max(0,state.service-1), quality=Math.max(0,state.quality-1);
+  const crew=Math.max(0,state.crew.length-1);
+  const practice=Math.sqrt(Math.max(0,state.jobsCompleted))*.035;
   return {
-    speed: clamp(18 + state.service * 4 + inventoryPower('service') * 2.25 + state.level * .55, 10, 100),
-    craft: clamp(18 + state.quality * 4 + inventoryPower('quality') * 2.25 + state.level * .55, 10, 100),
-    service: clamp(22 + (state.service + state.quality) * 2.4 + state.crew.length * 2.5 + state.level * .7, 10, 100),
-    teamwork: clamp(20 + crewPower() * 7 + state.crew.length * 4 + state.level * .8, 10, 100),
-    composure: clamp((state.morale / Math.max(1,state.maxMorale)) * 66 + state.level * .65 + Math.min(18, mastery / 6), 10, 100)
+    speed:clamp(1+service*.18+Math.max(0,inventoryPower('service')-1)*.12+level*.07+practice,1,10),
+    craft:clamp(1+quality*.18+inventoryPower('quality')*.12+level*.07+practice,1,10),
+    service:clamp(1+(service+quality)*.09+crew*.18+level*.07+practice,1,10),
+    teamwork:clamp(1+Math.max(0,crewPower()-2)*.18+crew*.15+level*.05+practice,1,10),
+    composure:clamp((1+level*.10+Math.sqrt(Math.max(0,state.jobsCompleted))*.06+Math.sqrt(mastery)*.05+crew*.12)*(.6+.4*state.morale/Math.max(1,state.maxMorale)),1,10)
   };
 }
 
 function coffeeShiftRequirements(shift){
   const weights = coffeeShiftWeight(shift);
-  const base = clamp(28 + shift.level * 1.18, 28, 84);
+  // The regulars are the safe learning batch; everything else asks for growth.
+  if(shift.id==='open')return Object.fromEntries(coffeeShiftTraits.map(t=>[t.id,1]));
+  const base=(shift.level===1?1.5:1.65)+(shift.level-1)*.14+Math.sqrt(shift.level-1)*.26;
   const out = {};
   coffeeShiftTraits.forEach(t => {
     const w = weights[t.id] || .5;
-    out[t.id] = clamp(Math.round(base * (.58 + w * .52)), 18, 96);
+    out[t.id]=Math.round(clamp(base*(.55+w*.45),1.1,8.5)*10)/10;
   });
   return out;
 }
@@ -73,7 +79,7 @@ function coffeeTraitHeatmap(shift){
   const coverage = coffeeTraitCoverage(requirements, player);
   const point = (i, value, radius=86) => {
     const angle = -Math.PI / 2 + i * Math.PI * 2 / coffeeShiftTraits.length;
-    return [120 + Math.cos(angle) * radius * value / 100,120 + Math.sin(angle) * radius * value / 100];
+    return [120 + Math.cos(angle) * radius * value / 10,120 + Math.sin(angle) * radius * value / 10];
   };
   const coords = p => p.map(n => n.toFixed(2)).join(',');
   const polygon = values => coffeeShiftTraits.map((t,i) => coords(point(i,values[t.id]))).join(' ');
@@ -81,13 +87,13 @@ function coffeeTraitHeatmap(shift){
   return `<figure class="skill-radar" data-shift="${shift.id}" data-traits="${coffeeShiftTraits.map(t=>player[t.id]).join(',')}" aria-label="${shift.name}: crew skill comparison">
     <div class="radar-plot">
       <svg class="radar-chart" viewBox="0 0 240 240" role="img" aria-label="${coverage.percent}% of requirements covered. ${summary}">
-        ${[20,40,60,80,100].map(v => `<polygon class="radar-ring" points="${coffeeShiftTraits.map((t,i) => coords(point(i,v))).join(' ')}"/>`).join('')}
-        ${coffeeShiftTraits.map((t,i) => `<line class="radar-spoke" x1="120" y1="120" x2="${point(i,100)[0]}" y2="${point(i,100)[1]}"/>`).join('')}
+        ${[2,4,6,8,10].map(v => `<polygon class="radar-ring" points="${coffeeShiftTraits.map((t,i) => coords(point(i,v))).join(' ')}"/>`).join('')}
+        ${coffeeShiftTraits.map((t,i) => `<line class="radar-spoke" x1="120" y1="120" x2="${point(i,10)[0]}" y2="${point(i,10)[1]}"/>`).join('')}
         <polygon class="radar-crew" points="${polygon(player)}"/>
         <polygon class="radar-required" points="${polygon(requirements)}"/>
         ${coffeeShiftTraits.map((t,i) => `<circle class="radar-dot" cx="${point(i,player[t.id])[0]}" cy="${point(i,player[t.id])[1]}" r="3"/>`).join('')}
       </svg>
-      ${coffeeShiftTraits.map((t,i) => {const p=point(i,100,108);return `<span class="radar-axis ${t.color}" style="left:${p[0]/2.4}%;top:${p[1]/2.4}%" role="img" aria-label="${t.label}" title="${t.label}">${icon(t.icon)}</span>`;}).join('')}
+      ${coffeeShiftTraits.map((t,i) => {const p=point(i,10,108);return `<span class="radar-axis ${t.color}" style="left:${p[0]/2.4}%;top:${p[1]/2.4}%" role="img" aria-label="${t.label}" title="${t.label}">${icon(t.icon)}</span>`;}).join('')}
     </div>
     <figcaption>
       <div class="radar-legend"><span class="radar-key required">Required</span><span class="radar-key crew">Your crew</span></div>
@@ -97,7 +103,7 @@ function coffeeTraitHeatmap(shift){
     <details class="radar-details"><summary>Skill details</summary>
       <div class="radar-values-heading"><span>Skill</span><span>Required</span><span>Your crew</span></div>
       ${coffeeShiftTraits.map(t => `<div class="radar-value-row"><span class="radar-trait ${t.color}" role="img" aria-label="${t.label}" title="${t.label}">${icon(t.icon)}</span><span class="radar-needed">${requirements[t.id]}</span><span class="radar-yours">${player[t.id].toFixed(1)} ${icon(player[t.id]>=requirements[t.id]?'check':'arrow-down')}</span></div>`).join('')}
-      <p>Skills run from 0 to 100. Cover every green spoke to meet the batch. The final result also depends on practice and luck.</p>
+      <p>Skills start at 1 and grow to 10. Gear, crew, upgrades and practice build your shape. The regulars are a safe place to start; new batches need more preparation.</p>
     </details>
   </figure>`;
 }
@@ -130,7 +136,7 @@ function coffeeShiftMatch(shift){
   let totalWeight = 0;
   coffeeShiftTraits.forEach(t => {
     const w = weights[t.id] || .5;
-    weighted += clamp(player[t.id] / requirements[t.id], 0, 1.55) * w;
+    weighted += clamp(player[t.id] / requirements[t.id], 0, 1) * w;
     totalWeight += w;
   });
   return weighted / Math.max(.01,totalWeight);
@@ -141,7 +147,10 @@ function coffeeResolveShift(shift){
   const mastery = state.shiftMastery[shift.id] || 0;
   const masteryBonus = Math.min(7, mastery / 45);
   const roll = (Math.random() - .5) * 18;
-  const score = clamp(25 + (match - .64) * 88 + masteryBonus + roll, 3, 98);
+  const requirements=coffeeShiftRequirements(shift), player=coffeePlayerTraits(shift);
+  const weakest=Math.min(...coffeeShiftTraits.map(t=>player[t.id]/requirements[t.id]));
+  const surplus=Math.max(0,Math.min(.4,weakest-1));
+  const score=clamp(60+(match-1)*75+surplus*60+masteryBonus+roll,3,98);
   let tier = 'miss';
   if(score >= 84) tier = 'perfect';
   else if(score >= 66) tier = 'strong';

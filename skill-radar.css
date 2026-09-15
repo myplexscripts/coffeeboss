@@ -1,4 +1,4 @@
-/* Shared 0–100 axes: green demand, gold crew. Trait colours stay unchanged. */
+/* Shared 0 to 10 axes: green demand, gold crew. Trait colours stay unchanged. */
 body .skill-radar{--radar-green:#82d6a9;--radar-gold:#f2c574;min-width:0;margin:0;font-size:14px;color:var(--text);align-self:start}
 body .radar-plot{position:relative;width:min(100%,260px);aspect-ratio:1;margin:0 auto}
 body .radar-chart{display:block;width:100%;height:100%;overflow:visible}

@@ -10,6 +10,12 @@ function loadState(){
     const raw = localStorage.getItem(SAVE_KEY);
     if(!raw) return defaultState();
     const parsed = JSON.parse(raw);
+    // Remove the old free starting bonus once, keeping every earned upgrade.
+    if(!parsed.skillBalanceVersion){
+      parsed.service=Math.max(1,(parsed.service ?? 5)-4);
+      parsed.quality=Math.max(1,(parsed.quality ?? 5)-4);
+      parsed.skillBalanceVersion=2;
+    }
     return Object.assign(defaultState(), parsed, { owned: parsed.owned||{}, inventory:parsed.inventory||{}, shiftMastery:parsed.shiftMastery||{}, bossDamage:parsed.bossDamage||{}, feed:parsed.feed||[] });
   } catch(e){ return defaultState(); }
 }
