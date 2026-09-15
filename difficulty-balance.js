@@ -7,7 +7,7 @@ const coffeeDifficulty={
   shift:{starter:1.25,levelOne:1.58,base:1.72,linear:.145,curve:.27,min:1.15,max:9},
   rival:{base:1.62,linear:.155,curve:.25,min:1.15,max:9.2},
   event:{base:1.62,linear:.22,quadratic:.045,min:1.15,max:9.2},
-  boss:{base:2.05,linear:.155,curve:.26,min:1.2,max:9.2}
+  boss:{base:2.45,linear:.155,curve:.26,min:1.2,max:9.2}
 };
 
 function coffeeDifficultyValues(base,weights,{min=1.15,max=9.2,low=.72,spread=.28}={}){
