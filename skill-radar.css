@@ -1,0 +1,47 @@
+/* Shared 0–100 axes: green demand, gold crew. Trait colours stay unchanged. */
+body .skill-radar{--radar-green:#82d6a9;--radar-gold:#f2c574;min-width:0;margin:0;font-size:14px;color:var(--text);align-self:start}
+body .radar-plot{position:relative;width:min(100%,260px);aspect-ratio:1;margin:0 auto}
+body .radar-chart{display:block;width:100%;height:100%;overflow:visible}
+body .radar-ring{fill:#1a3028;stroke:#62725a;stroke-width:1;fill-opacity:.18}
+body .radar-spoke{stroke:#62725a;stroke-width:1;opacity:.65}
+body .radar-crew{fill:var(--radar-gold);fill-opacity:.2;stroke:var(--radar-gold);stroke-width:2.5;stroke-linejoin:round}
+body .radar-required{fill:var(--radar-green);fill-opacity:.32;stroke:var(--radar-green);stroke-width:2;stroke-dasharray:5 3;stroke-linejoin:round}
+body .radar-dot{fill:var(--radar-gold);stroke:#1a3028;stroke-width:1}
+body .radar-axis{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:var(--surface-inset)}
+body :is(.radar-axis,.radar-trait).speed{color:var(--trait-speed)}
+body :is(.radar-axis,.radar-trait).craft{color:var(--trait-craft)}
+body :is(.radar-axis,.radar-trait).service{color:var(--trait-service)}
+body :is(.radar-axis,.radar-trait).teamwork{color:var(--trait-teamwork)}
+body :is(.radar-axis,.radar-trait).composure{color:var(--trait-composure)}
+body :is(.radar-axis,.radar-trait) svg{width:22px;height:22px;color:inherit}
+body .skill-radar figcaption{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+body .radar-legend{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;font-size:14px}
+body .radar-key{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+body .radar-key::before{content:'';width:18px;border-top:3px solid currentColor}
+body .radar-key.required{color:var(--radar-green)}
+body .radar-key.required::before{border-top-style:dashed}
+body .radar-key.crew,body .radar-yours{color:var(--radar-gold)}
+body .radar-needed{color:var(--radar-green)}
+body .radar-coverage{display:flex;align-items:center;gap:8px;font-size:20px;line-height:1.3;color:var(--radar-gold)}
+body .radar-coverage svg{width:22px;height:22px}
+body .radar-status{font-size:14px;line-height:1.4;color:var(--text-soft)}
+body .radar-details{margin-top:12px;font-size:14px}
+body .radar-details summary{padding:12px 8px;min-height:44px;cursor:pointer;text-align:center;border-radius:8px;color:var(--text-soft)}
+body .radar-details summary:hover{background:var(--surface-inset)}
+body :is(.radar-values-heading,.radar-value-row){display:grid;grid-template-columns:44px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;text-align:center;padding:8px 0;font-variant-numeric:tabular-nums}
+body .radar-values-heading{border-bottom:1px solid var(--edge);line-height:1.4}
+body .radar-yours{display:flex;align-items:center;justify-content:center;gap:4px}
+body .radar-yours svg{width:16px;height:16px;flex-shrink:0}
+body .radar-details p{font-size:14px;line-height:1.5;margin:8px 0 0}
+body .workspace-body .mission{grid-template-columns:72px minmax(0,1fr) 260px;align-items:start;column-gap:24px;row-gap:16px}
+body .workspace-body .mission-number{display:none}
+body .workspace-body .mission-art{grid-column:1;grid-row:1}
+body .workspace-body .mission-copy{grid-column:2;grid-row:1}
+body .workspace-body .mission>.skill-radar{grid-column:3;grid-row:1/3}
+body .workspace-body .mission-start{grid-column:1/3;grid-row:2;width:100%;min-width:0;align-self:end;margin:0}
+@media(max-width:900px){
+  body .workspace-body .mission{grid-template-columns:56px minmax(0,1fr);gap:16px}
+  body .workspace-body .mission-art{width:56px;padding:4px}
+  body .workspace-body .mission>.skill-radar{grid-column:1/-1;grid-row:2;width:min(100%,320px);justify-self:center}
+  body .workspace-body .mission-start{grid-column:1/-1;grid-row:3}
+}

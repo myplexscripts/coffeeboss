@@ -59,26 +59,67 @@ function coffeeHeatLevel(value){
   return 1;
 }
 
-function coffeeTraitHeatmap(shift, compact=false){
+// Coverage is a visual readiness check, separate from the existing outcome roll.
+// Surplus on one spoke never conceals a shortfall on another.
+function coffeeTraitCoverage(requirements, player){
+  const ratios = coffeeShiftTraits.map(t => Math.min(1, Math.max(0, player[t.id] / requirements[t.id])));
+  const met = ratios.filter(r => r >= 1).length;
+  return {met, percent:met === coffeeShiftTraits.length ? 100 : Math.min(99, Math.floor(ratios.reduce((a,b) => a+b,0) / ratios.length * 100))};
+}
+
+function coffeeTraitHeatmap(shift){
   const requirements = coffeeShiftRequirements(shift);
   const player = coffeePlayerTraits(shift);
-  if(compact){
-    return `<div class="trait-heat-mini" aria-label="Shift trait pressure">${coffeeShiftTraits.map(t => {
-      const lvl = coffeeHeatLevel(requirements[t.id]);
-      return `<span class="trait-mini ${t.color}" data-trait="${t.id}" role="img" aria-label="${t.label}: demand ${lvl} of 5" title="${t.label}: demand ${lvl} of 5" style="--heat:${lvl}">${icon(t.icon)}<span class="trait-demand" aria-hidden="true">${lvl}</span></span>`;
-    }).join('')}</div>`;
-  }
-  return `<div class="trait-heatmap">${coffeeShiftTraits.map(t => {
-    const req = requirements[t.id];
-    const yours = Math.round(player[t.id]);
-    const reqLevel = coffeeHeatLevel(req);
-    const strong = yours >= req;
-    return `<div class="trait-row ${t.color}">
-      <div class="trait-name">${icon(t.icon)}<span>${t.label}</span></div>
-      <div class="trait-cells" aria-label="${t.label} pressure ${reqLevel} of 5">${[1,2,3,4,5].map(n => `<i class="${n <= reqLevel ? 'hot' : ''}"></i>`).join('')}</div>
-      <div class="trait-you ${strong ? 'ahead' : 'behind'}"><span>${yours}</span>${icon(strong ? 'check' : 'arrow-up')}</div>
-    </div>`;
-  }).join('')}</div>`;
+  const coverage = coffeeTraitCoverage(requirements, player);
+  const point = (i, value, radius=86) => {
+    const angle = -Math.PI / 2 + i * Math.PI * 2 / coffeeShiftTraits.length;
+    return [120 + Math.cos(angle) * radius * value / 100,120 + Math.sin(angle) * radius * value / 100];
+  };
+  const coords = p => p.map(n => n.toFixed(2)).join(',');
+  const polygon = values => coffeeShiftTraits.map((t,i) => coords(point(i,values[t.id]))).join(' ');
+  const summary = coffeeShiftTraits.map(t => `${t.label}: ${player[t.id].toFixed(1)} crew, ${requirements[t.id]} required`).join('; ');
+  return `<figure class="skill-radar" data-shift="${shift.id}" data-traits="${coffeeShiftTraits.map(t=>player[t.id]).join(',')}" aria-label="${shift.name}: crew skill comparison">
+    <div class="radar-plot">
+      <svg class="radar-chart" viewBox="0 0 240 240" role="img" aria-label="${coverage.percent}% of requirements covered. ${summary}">
+        ${[20,40,60,80,100].map(v => `<polygon class="radar-ring" points="${coffeeShiftTraits.map((t,i) => coords(point(i,v))).join(' ')}"/>`).join('')}
+        ${coffeeShiftTraits.map((t,i) => `<line class="radar-spoke" x1="120" y1="120" x2="${point(i,100)[0]}" y2="${point(i,100)[1]}"/>`).join('')}
+        <polygon class="radar-crew" points="${polygon(player)}"/>
+        <polygon class="radar-required" points="${polygon(requirements)}"/>
+        ${coffeeShiftTraits.map((t,i) => `<circle class="radar-dot" cx="${point(i,player[t.id])[0]}" cy="${point(i,player[t.id])[1]}" r="3"/>`).join('')}
+      </svg>
+      ${coffeeShiftTraits.map((t,i) => {const p=point(i,100,108);return `<span class="radar-axis ${t.color}" style="left:${p[0]/2.4}%;top:${p[1]/2.4}%" role="img" aria-label="${t.label}" title="${t.label}">${icon(t.icon)}</span>`;}).join('')}
+    </div>
+    <figcaption>
+      <div class="radar-legend"><span class="radar-key required">Required</span><span class="radar-key crew">Your crew</span></div>
+      <strong class="radar-coverage">${icon(coverage.met===5?'circle-check':'scan')} ${coverage.percent}% covered</strong>
+      <span class="radar-status">${coverage.met===5?'All five skills meet the batch':`${coverage.met} of 5 skills meet the batch`}</span>
+    </figcaption>
+    <details class="radar-details"><summary>Skill details</summary>
+      <div class="radar-values-heading"><span>Skill</span><span>Required</span><span>Your crew</span></div>
+      ${coffeeShiftTraits.map(t => `<div class="radar-value-row"><span class="radar-trait ${t.color}" role="img" aria-label="${t.label}" title="${t.label}">${icon(t.icon)}</span><span class="radar-needed">${requirements[t.id]}</span><span class="radar-yours">${player[t.id].toFixed(1)} ${icon(player[t.id]>=requirements[t.id]?'check':'arrow-down')}</span></div>`).join('')}
+      <p>Skills run from 0 to 100. Cover every green spoke to meet the batch. The final result also depends on practice and luck.</p>
+    </details>
+  </figure>`;
+}
+
+function coffeeRefreshRadars(){
+  let changed=false;
+  document.querySelectorAll('.skill-radar[data-shift]').forEach(chart=>{
+    const shift=shifts.find(s=>s.id===chart.dataset.shift);
+    if(!shift)return;
+    const player=coffeePlayerTraits(shift);
+    if(chart.dataset.traits===coffeeShiftTraits.map(t=>player[t.id]).join(','))return;
+    const detailsOpen=chart.querySelector('details')?.open;
+    const focused=chart.contains(document.activeElement);
+    const template=document.createElement('template');
+    template.innerHTML=coffeeTraitHeatmap(shift);
+    const replacement=template.content.firstElementChild;
+    replacement.querySelector('details').open=detailsOpen;
+    chart.replaceWith(replacement);
+    if(focused)replacement.querySelector('summary').focus({preventScroll:true});
+    changed=true;
+  });
+  if(changed)lucide.createIcons();
 }
 
 function coffeeShiftMatch(shift){
@@ -192,7 +233,7 @@ function coffeeOpenShiftBrief(id){
     <div class="shift-brief-grid">
       <section class="shift-traits-panel">
         <div class="shift-panel-kicker">TRAIT PRESSURE</div>
-        <div class="shift-panel-note">Brighter cells matter more. The number at right is your current strength.</div>
+        <div class="shift-panel-note">Green is the batch. Gold is your crew.</div>
         ${coffeeTraitHeatmap(shift)}
       </section>
 

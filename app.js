@@ -7,7 +7,7 @@ document.addEventListener('click',e=>{
 document.getElementById('saveButton').addEventListener('click',()=>saveState());
 document.getElementById('settingsButton').addEventListener('click',showSettings);
 window.addEventListener('beforeunload',()=>saveState(true));
-setInterval(()=>{ updateTimers(); saveState(true); renderStats(); },10000);
+setInterval(()=>{ updateTimers(); saveState(true); renderStats(); coffeeRefreshRadars(); },10000);
 setInterval(()=>{ if(currentPage==='home'||currentPage==='breakroom') render(); },60000);
 
 render();
