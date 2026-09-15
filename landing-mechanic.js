@@ -119,17 +119,80 @@ function coffeeSampleRequiredLanding(requirements,rng=Math.random){
   ];
 }
 
+function coffeeLaunchDirection(requirements){
+  const values=coffeeShiftTraits.map(t=>requirements[t.id]||0);
+  const max=Math.max(...values),min=Math.min(...values);
+  if(max-min<1e-7)return {x:1,y:0,trait:null};
+  let index=0;
+  for(let i=1;i<values.length;i++)if(values[i]>values[index]+1e-7)index=i;
+  const angle=-Math.PI/2+index*Math.PI*2/coffeeShiftTraits.length;
+  return {x:Math.cos(angle),y:Math.sin(angle),trait:coffeeShiftTraits[index].id};
+}
+
+function coffeeClosestPointOnSegment(point,a,b){
+  const abx=b[0]-a[0],aby=b[1]-a[1];
+  const length=abx*abx+aby*aby;
+  const t=length?clamp(((point[0]-a[0])*abx+(point[1]-a[1])*aby)/length,0,1):0;
+  return [a[0]+abx*t,a[1]+aby*t];
+}
+
+function coffeePhysicsTrajectory(requirements,landing,steps=165){
+  const polygon=coffeeRadarPolygon(requirements);
+  const center=coffeeRadarCenter;
+  const launch=coffeeLaunchDirection(requirements);
+  const position=[center[0],center[1]];
+  const velocity=[launch.x*118,launch.y*118];
+  const target=[landing.x??landing[0],landing.y??landing[1]];
+  const duration=2.35,dt=duration/steps;
+  const points=[{x:position[0],y:position[1]}];
+
+  for(let step=1;step<=steps;step++){
+    const progress=step/steps;
+    const spring=2.2+70*Math.pow(progress,4);
+    const drag=.65+4.8*Math.pow(progress,3);
+    velocity[0]+=(target[0]-position[0])*spring*dt;
+    velocity[1]+=(target[1]-position[1])*spring*dt;
+    const damping=Math.exp(-drag*dt);
+    velocity[0]*=damping;velocity[1]*=damping;
+    const speed=Math.hypot(velocity[0],velocity[1]);
+    if(speed>160){velocity[0]*=160/speed;velocity[1]*=160/speed;}
+
+    let candidate=[position[0]+velocity[0]*dt,position[1]+velocity[1]*dt];
+    if(!coffeePointInPolygon(candidate,polygon)){
+      let nearest=null;
+      for(let i=0;i<polygon.length;i++){
+        const a=polygon[i],b=polygon[(i+1)%polygon.length];
+        const point=coffeeClosestPointOnSegment(candidate,a,b);
+        const dx=candidate[0]-point[0],dy=candidate[1]-point[1],distance=dx*dx+dy*dy;
+        if(!nearest||distance<nearest.distance)nearest={distance,point,a,b};
+      }
+      const edgeX=nearest.b[0]-nearest.a[0],edgeY=nearest.b[1]-nearest.a[1];
+      let normalX=-edgeY,normalY=edgeX;
+      const normalLength=Math.hypot(normalX,normalY)||1;
+      normalX/=normalLength;normalY/=normalLength;
+      const toCenterX=center[0]-nearest.point[0],toCenterY=center[1]-nearest.point[1];
+      if(toCenterX*normalX+toCenterY*normalY<0){normalX*=-1;normalY*=-1;}
+      candidate=[nearest.point[0]+normalX*.75,nearest.point[1]+normalY*.75];
+      const normalSpeed=velocity[0]*normalX+velocity[1]*normalY;
+      if(normalSpeed<0){
+        velocity[0]-=(1+.72)*normalSpeed*normalX;
+        velocity[1]-=(1+.72)*normalSpeed*normalY;
+      }
+      velocity[0]*=.96;velocity[1]*=.96;
+    }
+    position[0]=candidate[0];position[1]=candidate[1];
+    points.push({x:position[0],y:position[1]});
+  }
+  points.push({x:target[0],y:target[1]});
+  return points;
+}
+
 coffeeActivityRoll=function(shift){
   const requirements=coffeeShiftRequirements(shift),player=coffeePlayerTraits(shift);
   const coverage=coffeeTraitCoverage(requirements,player);
   const landing=coffeeSampleRequiredLanding(requirements);
   const crew=coffeeRadarPolygon(player);
   const success=coverage.met===coffeeShiftTraits.length||coffeePointInPolygon(landing,crew);
-  const bounces=[
-    coffeeSampleRequiredLanding(requirements),
-    coffeeSampleRequiredLanding(requirements),
-    coffeeSampleRequiredLanding(requirements)
-  ];
   let tier='miss',score=Math.max(3,Math.min(39,Math.round(coverage.percent*.35)));
   if(success){
     if(coffeePointInPolygon(landing,coffeeRadarPolygon(player,.45))){tier='perfect';score=90;}
@@ -143,7 +206,7 @@ coffeeActivityRoll=function(shift){
     success,
     tier,
     landing:{x:landing[0],y:landing[1]},
-    bounces:bounces.map(([x,y])=>({x,y}))
+    launch:coffeeLaunchDirection(requirements)
   };
 };
 
@@ -182,7 +245,7 @@ function coffeeRevealShape(activity,result){
       <polygon class="radar-crew" points="${coords(crew)}"/>
       <polygon class="radar-required" points="${coords(required)}"/>
       <circle class="reveal-radar-impact" cx="120" cy="120" r="7" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" opacity="0"/>
-      <circle class="reveal-radar-ball" cx="120" cy="120" r="7" fill="#fffaf2" stroke="#10151d" stroke-width="3"/>
+      <circle class="reveal-radar-ball" cx="120" cy="120" r="6" fill="#fffaf2" stroke="#10151d" stroke-width="3"/>
     </svg>
     <div class="radar-legend" style="margin-top:4px"><span class="radar-key required">Required</span><span class="radar-key crew">Your crew</span></div>
     <strong style="display:block;margin-top:8px;text-align:center;font-size:14px;color:var(--text-2)">${coverage.percent}% success area</strong>
@@ -198,6 +261,7 @@ coffeePlayReveal=function(activity,result,commit){
   layer.setAttribute('aria-label',`${activity.name}: resolving`);
   layer.innerHTML=`<section class="action-report reveal-panel"><span class="report-kicker">YOUR CREW IS ON IT</span><h2>${coffeeEscape(activity.name)}</h2>${coffeeRevealShape(activity,result)}<p>The landing decides it.</p><button class="report-continue" type="button">SHOW RESULT ${icon('arrow-right')}</button><span class="reveal-hint">Click anywhere to skip</span></section>`;
   document.body.appendChild(layer);layer.showModal();lucide.createIcons();
+
   let finished=false,frame=0;
   const finish=()=>{
     if(finished)return;
@@ -212,26 +276,32 @@ coffeePlayReveal=function(activity,result,commit){
   layer.querySelector('button').focus({preventScroll:true});
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){finish();return;}
 
+  const requirements=coffeeShiftRequirements(activity);
   const ball=layer.querySelector('.reveal-radar-ball'),impact=layer.querySelector('.reveal-radar-impact');
   const landing=result.landing||{x:120,y:120};
-  const bounces=(result.bounces||[]).slice(0,3);
-  const waypoints=[{x:120,y:120}];
-  bounces.forEach(point=>{waypoints.push(point,{x:120,y:120});});
-  waypoints.push(landing);
-  const start=performance.now(),duration=2100,segments=waypoints.length-1;
+  const trajectory=coffeePhysicsTrajectory(requirements,landing);
+  const start=performance.now(),duration=2350,impactDuration=180;
+
   const animate=now=>{
     if(finished)return;
-    const t=Math.min(1,(now-start)/duration);
-    const phase=t*segments,index=Math.min(segments-1,Math.floor(phase));
-    const local=index===segments-1&&t===1?1:phase-index;
-    const eased=local*local*(3-2*local);
-    const from=waypoints[index],to=waypoints[index+1];
-    const x=from.x+(to.x-from.x)*eased,y=from.y+(to.y-from.y)*eased;
+    const elapsed=now-start;
+    const t=clamp(elapsed/duration,0,1);
+    const position=t*(trajectory.length-1);
+    const index=Math.min(trajectory.length-2,Math.floor(position));
+    const local=position-index;
+    const from=trajectory[index],to=trajectory[index+1];
+    const x=from.x+(to.x-from.x)*local,y=from.y+(to.y-from.y)*local;
     ball.setAttribute('cx',x.toFixed(2));ball.setAttribute('cy',y.toFixed(2));
-    ball.setAttribute('r',(7+Math.sin(local*Math.PI)*2).toFixed(2));
+    const speedPulse=Math.min(1,Math.hypot(to.x-from.x,to.y-from.y)/1.4);
+    ball.setAttribute('r',(6+speedPulse*.7).toFixed(2));
+
     if(t<1){frame=requestAnimationFrame(animate);return;}
-    ball.setAttribute('cx',landing.x.toFixed(2));ball.setAttribute('cy',landing.y.toFixed(2));ball.setAttribute('r','7');
-    impact.setAttribute('cx',landing.x.toFixed(2));impact.setAttribute('cy',landing.y.toFixed(2));impact.setAttribute('r','16');impact.setAttribute('opacity','.8');
+    ball.setAttribute('cx',landing.x.toFixed(2));ball.setAttribute('cy',landing.y.toFixed(2));ball.setAttribute('r','6');
+    const impactT=clamp((elapsed-duration)/impactDuration,0,1);
+    impact.setAttribute('cx',landing.x.toFixed(2));impact.setAttribute('cy',landing.y.toFixed(2));
+    impact.setAttribute('r',(8+impactT*18).toFixed(2));
+    impact.setAttribute('opacity',(.8*(1-impactT)).toFixed(2));
+    if(impactT<1){frame=requestAnimationFrame(animate);return;}
     finish();
   };
   frame=requestAnimationFrame(animate);
