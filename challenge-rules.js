@@ -93,7 +93,7 @@ runChallenge=function(type,result){
       else{const reward=80+tier*45;state.cash+=reward;state.lifetimeIncome+=reward;}
       state.xp+=6+tier*2;
     }
-    addFeed('trophy',`${coffeeEventNames[type]}: round ${tier} won. ${state.eventWins[type]%3}/3 wins toward the next round.`);
+    addFeed('trophy',`${coffeeEventNames[type]}: round ${tier} won. ${tier===10?'Top round mastered.':`${state.eventWins[type]%3}/3 wins toward the next round.`}`);
   }
   levelCheck();checkAchievements();saveState(true);render();return result;
 };

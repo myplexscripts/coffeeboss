@@ -114,7 +114,7 @@ cbxEventBrief=function(context){
       copy=complete?'You earned this one. The reward and new gear are yours.':`${boss.hp-state.bossDamage[boss.id]} left. ${won?'Your progress is saved.':'Build the missing skills before another attempt.'}`;
       celebrate=complete||applied.milestones>0;
     }else if(context.action==='challenge'){
-      copy=won?`${(state.eventWins[context.type]||0)%3}/3 wins toward the next round.`:copy;
+      copy=won?(tier===10?'You beat the top round. Come back for another shot at the rewards.':`${(state.eventWins[context.type]||0)%3}/3 wins toward the next round.`):copy;
       if(coffeeEventTier(context.type)>tier){kicker='NEXT ROUND UNLOCKED';copy=`Round ${tier} cleared. Round ${tier+1} asks more of your crew and pays better.`;}
     }
     if(found.length)copy+=` Found: ${found.map(i=>i.name).join(', ')}.`;

@@ -347,7 +347,7 @@ renderCrew=function(){
 };
 
 function cbxChallenge(type,iconName,title,copy,reward){
-  return `<article class="event-poster event-${type}"><div class="event-light"></div><div class="event-art">${icon(iconName)}</div><span class="event-kicker">ROUND ${coffeeEventTier(type)} · ${(state.eventWins?.[type]||0)%3}/3 WINS TO ADVANCE</span><h2>${title}</h2><p>${copy}</p><div class="event-reward">${icon('gift')}<span>${reward}</span></div>${coffeeTraitHeatmap(coffeeEventProfile(type))}<button data-action="challenge" data-type="${type}" data-name="${title}" ${state.challengeTokens<1?'disabled':''}>ENTER EVENT ${icon('arrow-right')}</button></article>`;
+  return `<article class="event-poster event-${type}"><div class="event-light"></div><div class="event-art">${icon(iconName)}</div><span class="event-kicker">ROUND ${coffeeEventTier(type)} · ${coffeeEventTier(type)===10?'TOP ROUND':`${(state.eventWins?.[type]||0)%3}/3 WINS TO ADVANCE`}</span><h2>${title}</h2><p>${copy}</p><div class="event-reward">${icon('gift')}<span>${reward}</span></div>${coffeeTraitHeatmap(coffeeEventProfile(type))}<button data-action="challenge" data-type="${type}" data-name="${title}" ${state.challengeTokens<1?'disabled':''}>ENTER EVENT ${icon('arrow-right')}</button></article>`;
 }
 
 function cbxBossStage(b){
@@ -371,7 +371,7 @@ renderChallenges=function(){
   return `<div class="scene-screen challenges-scene">
     ${cbxSceneIntro('challenges',extras)}
     <section class="event-marquee">${cbxChallenge('latte','palette','Latte Art Throwdown','Make something worth putting on the counter, then hope the judges agree.','Cash and XP')}${cbxChallenge('speed','timer','Speed Service Round','Send the crew through a busy run for a quick pick-me-up.','XP and Energy')}${cbxChallenge('crate','package-search','Supply Run','Bring back the order intact. A clean run earns supplies or cash.','Cash or gear')}</section>
-    <div class="chapter-break"><span>THE BIG TESTS</span><p>Progress is saved. Every attempt gets you closer to completing the challenge.</p></div>
+    <div class="chapter-break"><span>THE BIG TESTS</span><p>Progress is saved. Successful attempts move you toward the next milestone.</p></div>
     <section class="boss-run">${active.length?active.map(cbxBossStage).join(''):`<div class="locked-challenge">${icon('lock-keyhole')}<h2>Your first major challenge arrives at Level 4</h2><p>Keep working. Word about the shop is starting to travel.</p></div>`}</section>
   </div>`;
 };
