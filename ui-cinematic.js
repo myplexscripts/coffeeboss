@@ -144,7 +144,7 @@ function cbxSceneIntro(scene, extras=''){
 }
 
 function cbxReadout(label,value,iconName,tone=''){
-  return `<div class="stage-readout ${tone}">${icon(iconName)}<span>${label}</span><strong>${value}</strong></div>`;
+  return `<div class="stage-readout ${tone}"><span class="readout-icon">${icon(iconName)}</span><span class="readout-label">${label}</span><strong class="readout-value">${value}</strong></div>`;
 }
 
 function cbxFeed(limit=6){
@@ -240,7 +240,7 @@ renderShifts=function(){
   if(!currentTab||!unlockedDistricts.some(d=>d.id===currentTab)) currentTab=state.district;
   const district=cbDistrict(currentTab)||unlockedDistricts[0];
   const districtShifts=shifts.filter(s=>s.district===district.id);
-  const extras=`<div class="scene-inline-facts">${cbxReadout('Energy ready',`${state.energy}/${state.maxEnergy}`,'zap','energy')}${cbxReadout('Refill','1 per min','timer')}</div>`;
+  const extras=`<div class="scene-inline-facts">${cbxReadout('Energy ready',`${state.energy}/${state.maxEnergy}`,'zap','energy')}${cbxReadout('Refill',state.bossStyle==='operator'?'1 / 45 sec':'1 / min','timer')}</div>`;
   return `<div class="scene-screen shifts-scene">
     ${cbxSceneIntro('shifts',extras)}
     <nav class="district-switcher">${unlockedDistricts.map(d=>`<button class="${d.id===district.id?'active':''}" data-action="tab" data-tab="${d.id}">${icon(d.icon)}<span>${d.name}</span></button>`).join('')}</nav>
@@ -390,7 +390,7 @@ renderReserve=function(){
 renderBreakroom=function(){
   const missing=state.maxMorale-state.morale;
   const cost=Math.max(25,Math.floor(missing*2.2));
-  const extras=`<div class="scene-inline-facts">${cbxReadout('Boss Points',state.bossPoints,'crown','xp')}${cbxReadout('Morale refill','1 every 2 min','timer')}</div>`;
+  const extras=`<div class="scene-inline-facts">${cbxReadout('Boss Points',state.bossPoints,'crown','xp')}${cbxReadout('Morale refill',state.bossStyle==='competitor'?'1 / 90 sec':'1 / 2 min','timer')}</div>`;
   return `<div class="scene-screen breakroom-scene">
     ${cbxSceneIntro('breakroom',extras)}
     <section class="rest-stage">

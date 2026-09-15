@@ -83,8 +83,17 @@ function symboliseResources(root){
     }
     fragment.append(document.createTextNode(node.nodeValue.slice(start)));node.replaceWith(fragment);
   }
+  // Keep the readout's icon, label and value in explicit layout slots.
+  root.querySelectorAll?.('.stage-readout').forEach(el=>{
+    const inline=el.querySelector('.readout-label .resource-symbol');
+    if(inline){
+      const slot=el.querySelector('.readout-icon');
+      slot.innerHTML=inline.outerHTML;inline.remove();
+      if(!el.querySelector('.readout-label').textContent.trim())el.classList.add('readout-icon-only');
+    }
+  });
   // Existing resource components already supplied an icon beside their label.
-  root.querySelectorAll?.('.resource-chip,.stage-readout,.report-token,.status-item,.resource-guide summary,.mission-pay').forEach(el=>{
+  root.querySelectorAll?.('.resource-chip,.report-token,.status-item,.resource-guide summary,.mission-pay').forEach(el=>{
     if(el.querySelector('.resource-symbol'))Array.from(el.children).filter(c=>c.matches('svg,i[data-lucide]')).forEach(c=>{c.style.display='none';c.setAttribute('aria-hidden','true');});
   });
   if(nodes.length)lucide.createIcons();

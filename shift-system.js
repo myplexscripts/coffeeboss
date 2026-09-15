@@ -3,7 +3,7 @@
 const coffeeShiftTraits = [
   { id:'speed', label:'Speed', icon:'timer', color:'speed' },
   { id:'craft', label:'Craft', icon:'bean', color:'craft' },
-  { id:'service', label:'Service', icon:'hand-heart', color:'service' },
+  { id:'service', label:'Service', icon:'gauge', color:'service' },
   { id:'teamwork', label:'Teamwork', icon:'users', color:'teamwork' },
   { id:'composure', label:'Composure', icon:'heart-pulse', color:'composure' }
 ];
@@ -65,7 +65,7 @@ function coffeeTraitHeatmap(shift, compact=false){
   if(compact){
     return `<div class="trait-heat-mini" aria-label="Shift trait pressure">${coffeeShiftTraits.map(t => {
       const lvl = coffeeHeatLevel(requirements[t.id]);
-      return `<span class="trait-mini ${t.color}" title="${t.label}" style="--heat:${lvl}"></span>`;
+      return `<span class="trait-mini ${t.color}" data-trait="${t.id}" role="img" aria-label="${t.label}: demand ${lvl} of 5" title="${t.label}: demand ${lvl} of 5" style="--heat:${lvl}">${icon(t.icon)}<span class="trait-demand" aria-hidden="true">${lvl}</span></span>`;
     }).join('')}</div>`;
   }
   return `<div class="trait-heatmap">${coffeeShiftTraits.map(t => {

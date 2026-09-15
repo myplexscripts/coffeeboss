@@ -1,0 +1,175 @@
+/* Shared rules for every playable screen. Components keep their layout slots
+   when a word becomes a symbol; colour describes the resource, not the page. */
+:root{
+  --space-1:8px;--space-2:16px;--space-3:24px;
+  --radius-control:8px;--radius-panel:12px;
+  --surface:#233d32;--surface-inset:#1a3028;--edge:#62725a;
+  --cash:#82d6a9;--energy:#6bcef0;--drive:#ee9e6c;--morale:#f19ea8;
+  --xp:#bea4fa;--service:#f2c574;--quality:#82d9cc;
+  --trait-speed:var(--energy);--trait-craft:var(--xp);--trait-service:var(--service);
+  --trait-teamwork:var(--cash);--trait-composure:var(--morale);
+}
+body{font-size:16px}
+button,input,select,textarea{font:inherit}
+button{min-height:44px}
+button svg{flex-shrink:0;min-width:16px;min-height:16px}
+body .workspace-body :is(p,small,span,button,h1,h2,h3){word-break:normal;overflow-wrap:normal}
+body .workspace-body :is(h1,h2,h3){text-wrap:pretty}
+body .workspace-body p{line-height:1.6}
+body .workspace-body{padding:24px;scrollbar-gutter:stable}
+body .workspace-bar{padding:12px 24px}
+body .workspace-intro{margin:0 0 24px}
+body .workspace-intro h2{margin:0 0 8px;font-size:28px;line-height:1.2}
+body .workspace-intro>p{margin:0 0 16px;font-size:16px}
+body .scene-inline-facts,body .career-tape{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px;align-items:stretch;margin:16px 0;padding:0;background:none;border:0}
+body .stage-readout{display:grid;grid-template-areas:'icon label' 'icon value';grid-template-columns:24px minmax(0,1fr);grid-template-rows:auto auto;align-content:center;column-gap:12px;row-gap:4px;min-width:0;min-height:60px;padding:8px 0!important;border:0!important}
+body .stage-readout>.readout-icon{grid-area:icon;display:flex;align-items:center;justify-content:center;width:24px;min-width:24px}
+body .stage-readout>.readout-label{grid-area:label;min-width:0;font-size:14px;line-height:1.4;letter-spacing:.025em;text-transform:none}
+body .stage-readout>.readout-value{grid-area:value;min-width:0;font-size:20px;line-height:1.3;white-space:normal;overflow-wrap:break-word;font-variant-numeric:tabular-nums}
+body .stage-readout.readout-icon-only{grid-template-areas:'icon value';grid-template-rows:auto}
+body .readout-icon-only>.readout-label{display:none}
+body .stage-readout svg{width:22px;height:22px;grid-row:auto}
+body .career-tape{padding:16px;background:var(--surface);border-radius:var(--radius-panel)}
+body .resource-symbol[data-resource]{--symbol:var(--text);color:var(--symbol)!important;font-size:inherit;line-height:1;vertical-align:-.15em}
+body .resource-symbol[data-resource] svg{color:inherit!important;width:20px!important;height:20px!important;min-width:20px;min-height:20px;max-width:none;max-height:none}
+body .resource-symbol[data-resource=cash]{--symbol:var(--cash)}
+body .resource-symbol[data-resource=energy]{--symbol:var(--energy)}
+body .resource-symbol[data-resource=drive]{--symbol:var(--drive)}
+body .resource-symbol[data-resource=morale]{--symbol:var(--morale)}
+body .resource-symbol[data-resource=xp],body .resource-symbol[data-resource^=skill-point],body .resource-symbol[data-resource^=boss-point],body .resource-symbol[data-resource^=challenge-token]{--symbol:var(--xp)}
+body .resource-symbol[data-resource=service]{--symbol:var(--service)}
+body .resource-symbol[data-resource=quality]{--symbol:var(--quality)}
+body :is(.resource-chip,.report-token){display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;min-width:0;min-height:36px;padding:8px 12px;border:1px solid #61735d;border-radius:8px;background:var(--surface-inset);line-height:1.3}
+body :is(.resource-chip,.report-token)>span{display:inline;min-width:0}
+body :is(.resource-chip,.report-token) strong{font-size:16px;white-space:nowrap}
+body :is(.resource-chip,.report-token) svg{position:static;width:20px;height:20px;flex-shrink:0}
+body :is(.resource-chip,.report-token) .resource-symbol{display:inline-flex}
+body :is(.mission-pay,.locker-stats,.boss-rewards,.report-tokens){display:flex;flex-wrap:wrap;gap:8px}
+body .resource-guide{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+body .resource-guide details{flex:1 1 220px;min-width:0;padding:12px 16px;border:1px solid var(--edge);border-radius:8px;background:var(--surface-inset)}
+body .resource-guide summary{line-height:1.5;min-height:24px}
+body .resource-guide summary::after{content:'+';margin-left:auto;font-size:20px}
+body .resource-guide details[open] summary::after{content:'−'}
+body .resource-guide p{font-size:14px;margin:12px 0 0}
+body .workspace-body :is(.mission,.route-stop,.locker-slot,.matchup,.crew-member,.event-poster,.boss-stage,.vault-console,.rest-stage,.skill-stage,.collection-case){border:1px solid var(--edge);border-radius:var(--radius-panel);clip-path:none;box-shadow:none;background:var(--surface);overflow:visible}
+body .workspace-body :is(.mission,.route-stop,.locker-slot,.crew-member,.boss-stage,.vault-console,.rest-stage,.skill-stage,.collection-case){padding:16px;gap:16px}
+body .workspace-body :is(.mission-list,.location-route,.locker-grid,.crew-lineup,.event-marquee,.boss-run,.collection-cabinet){display:grid;gap:16px;background:none;padding:0;box-shadow:none}
+body .workspace-body :is(.rival-board,.locker-grid,.crew-lineup,.event-marquee,.collection-cabinet){grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
+body .workspace-body :is(.mission-board-heading,.locker-heading,.boost-heading,.chapter-break){padding:16px;gap:12px;border:0;border-radius:8px;background:var(--surface-inset);margin-bottom:16px;flex-wrap:wrap;align-items:center}
+body .workspace-body .chapter-break p{margin:0}
+body .workspace-body button,body .report-continue,body .modal .btn{min-height:48px;padding:12px 16px;border:1px solid var(--edge);border-radius:var(--radius-control);clip-path:none;box-shadow:none;font-size:14px;line-height:1.4;letter-spacing:.01em;white-space:normal;word-break:normal;overflow-wrap:normal;transition:background .15s,transform .15s}
+body .workspace-body button[data-action]:not([data-action=tab]):not([data-action=nav]),body .report-continue{background:#355b45;color:#f8e5be}
+body .workspace-body button[data-action]:hover:not(:disabled),body .report-continue:hover{background:#466f55;transform:translateY(-1px)}
+body .workspace-body button:disabled{opacity:1!important;filter:none;color:#aab8a0!important;background:#283d32!important;border-color:#4e6150;cursor:not-allowed}
+body .workspace-body :is(.mission.locked,.route-stop.locked,.boss-stage.defeated){opacity:1;filter:none}
+body .workspace-body :is(.mode-switch,.district-switcher){display:flex;flex-wrap:wrap;gap:8px;padding:8px;border-radius:12px;background:var(--surface-inset)}
+body .workspace-body :is(.mode-switch,.district-switcher) button{flex:1 1 auto;background:transparent;color:#d0d8c4;border-color:transparent}
+body .workspace-body :is(.mode-switch,.district-switcher) button.active{background:#e6bb78;color:#253b2f;border-color:#e6bb78}
+body .workspace-body .mission{grid-template-columns:32px 72px minmax(0,1fr) 180px;align-items:center}
+body .workspace-body .mission h2{font-size:20px}
+body .workspace-body .mission-board::before{display:none}
+body .workspace-body .mission-art{width:72px;height:auto;min-height:88px;border-radius:8px;padding:8px;gap:8px}
+body .trait-heat-mini{display:flex;flex-wrap:wrap;gap:8px}
+body .trait-mini{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:44px;width:auto;height:32px;padding:4px 8px;border:1px solid currentColor;border-radius:8px;background:var(--surface-inset);box-shadow:none}
+body .trait-mini svg{width:18px;height:18px;color:inherit}
+body .trait-mini.speed{color:var(--trait-speed)}body .trait-mini.craft{color:var(--trait-craft)}body .trait-mini.service{color:var(--trait-service)}body .trait-mini.teamwork{color:var(--trait-teamwork)}body .trait-mini.composure{color:var(--trait-composure)}
+body .trait-demand{font-size:14px;color:inherit}
+body .trait-row .trait-name{color:inherit}
+body .trait-row .trait-name svg{color:inherit!important}
+body .workspace-body .route-stop{grid-template-columns:72px minmax(0,1fr) 160px;position:relative;z-index:1;min-height:0}
+body .workspace-body .route-node{width:64px;height:64px;min-width:64px}
+body .workspace-body .route-node>span{background:#1a3d31;border:2px solid #789c85;isolation:isolate}
+body .workspace-body .route-node b{top:-6px;right:-4px;width:28px;height:28px;font-size:14px;background:#314e3c;border:1px solid #789c85;color:#f2e2ba}
+body .workspace-body .location-route-line{display:none}
+body .workspace-body .route-income{border:0;padding:0}
+body .workspace-body .route-stop>button{grid-column:2/-1;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+body .workspace-body .route-place h2{font-size:22px}
+body .workspace-body .locker-slot{grid-template-columns:80px minmax(0,1fr)}
+body .workspace-body .locker-art{width:80px;height:96px;border-radius:8px;gap:8px}
+body .workspace-body .locker-art span{font-size:14px;line-height:1.3;white-space:normal}
+body .workspace-body .locker-slot>button{margin:0;gap:12px}
+body .workspace-body .locker-count{right:8px;top:8px;font-size:14px;min-width:28px;min-height:28px}
+body .workspace-body .matchup{overflow:hidden;gap:16px;padding-bottom:16px}
+body .workspace-body .matchup-name,body .workspace-body .matchup-prize{margin:0;padding:0 16px}
+body .workspace-body .matchup>button{margin:0 16px;margin-top:auto}
+body .workspace-body .matchup-difficulty{font-size:14px}
+body .workspace-body .event-poster{padding:16px;gap:12px;min-height:0;overflow:hidden}
+body .workspace-body .event-poster>button{margin-top:auto}
+body .workspace-body .event-art{margin:0 auto}
+body .workspace-body .event-reward{margin:0 0 4px}
+body .workspace-body .boss-stage{grid-template-columns:80px minmax(0,1fr) minmax(260px,1fr)}
+body .workspace-body .boss-stage-art{width:80px;height:96px;border-radius:8px}
+body .workspace-body .boss-stage-actions{gap:8px}
+body .workspace-body .boss-stage-actions button{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px}
+body .workspace-body .crew-member{grid-template-columns:80px minmax(0,1fr);min-height:0}
+body .workspace-body .crew-card-power{grid-column:2;margin:0;padding:0}
+body .workspace-body .crew-call{padding:16px;gap:16px;border-radius:12px;border:1px solid var(--edge);background:var(--surface-inset)}
+body .workspace-body .vault-stage{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;background:none;box-shadow:none}
+body .workspace-body .vault-door{display:none}
+body .workspace-body .vault-console{min-width:0;min-height:0}
+body .workspace-body .vault-console h2{font-size:32px}
+body .workspace-body .vault-console p{margin:8px 0 16px}
+body .workspace-body .vault-input{grid-template-columns:minmax(0,1fr);gap:8px}
+body .workspace-body input{min-height:48px;min-width:0;width:100%;padding:12px 16px;border:1px solid var(--edge);border-radius:8px;font-size:16px;background:var(--surface-inset)}
+body .workspace-body .rest-stage{grid-template-columns:180px minmax(0,1fr);min-height:0}
+body .workspace-body .morale-dial{width:160px;box-shadow:none;background:conic-gradient(var(--morale-colour,#f19ea8) calc(var(--morale)*1%),#3c5444 0)}
+body .workspace-body .morale-dial svg{color:#f19ea8}
+body .workspace-body .rest-copy h2{font-size:26px}
+body .workspace-body .rest-copy button{min-width:0;max-width:100%}
+body .workspace-body .boost-station{background:none}
+body .workspace-body .boost-controls{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px;background:none}
+body .workspace-body .boost-controls button{min-height:100px;gap:8px}
+body .workspace-body .skill-stage{grid-template-columns:160px minmax(0,1fr)}
+body .workspace-body .skill-core{width:144px;box-shadow:none;background:none;border-radius:0}
+body .workspace-body .skill-branches{grid-template-columns:minmax(0,1fr);gap:8px}
+body .workspace-body .skill-branch{grid-template-columns:48px minmax(0,1fr) 56px;padding:12px;gap:12px;border:1px solid var(--edge);border-radius:8px;background:var(--surface-inset);min-height:0}
+body .workspace-body .skill-branch-icon{width:48px;height:48px;border-radius:8px}
+body .workspace-body .skill-branch button{width:56px;padding:8px}
+body .workspace-body .collection-case{min-height:0;gap:16px}
+body .workspace-body .collection-case-items{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+body .workspace-body .collection-case-items>span{flex:0 0 44px;width:44px;height:44px;border-radius:8px;clip-path:none;box-shadow:none}
+body .workspace-body .collection-case-reward{flex-wrap:wrap;padding-top:16px;gap:12px}
+body .workspace-body .collection-case-reward button{width:100%}
+body .modal,body .action-report{border-radius:12px;border:1px solid var(--edge)}
+body .modal-head,body .modal-body{padding:24px}
+body .modal .settings-grid{gap:12px}
+body .action-report-layer .action-report{padding:24px;gap:16px}
+body .action-report :is(h2,p,.report-tokens){margin:0}
+body .report-continue{margin-top:8px}
+body .game-hud .status-item strong{font-size:16px;white-space:nowrap}
+body .mobile-nav-item{font-size:14px}
+body .mobile-nav-item span{font-size:14px;line-height:1.2;white-space:nowrap}
+body .shop-spot{max-width:240px;min-height:56px}
+body .shop-spot small{font-size:14px;line-height:1.3}
+@media(max-width:900px){
+  body .workspace-body .mission{grid-template-columns:72px minmax(0,1fr)}
+  body .workspace-body .mission-number{display:none}
+  body .workspace-body .mission-start{grid-column:1/-1;width:100%}
+  body .workspace-body .boss-stage{grid-template-columns:80px minmax(0,1fr)}
+  body .workspace-body .boss-stage-pressure{grid-column:1/-1;width:100%}
+  body .mobile-nav{height:auto;min-height:68px;grid-template-columns:repeat(11,minmax(44px,1fr));overflow-x:auto;justify-content:start}
+  body .mobile-nav-item{padding:8px 4px}
+  body .mobile-nav-item span{white-space:normal}
+}
+@media(max-width:700px){
+  body .workspace-body{padding:16px;scrollbar-gutter:auto;max-height:calc(100dvh - 244px)}
+  body .workspace-bar{padding:8px 16px}
+  body .workspace-intro h2{font-size:24px}
+  body .workspace-intro>p{font-size:14px}
+  body .scene-inline-facts,body .career-tape{grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr))}
+  body .workspace-body .route-stop{grid-template-columns:64px minmax(0,1fr)}
+  body .workspace-body .route-income{grid-column:2}
+  body .workspace-body .route-stop>button{grid-column:1/-1}
+  body .workspace-body .mission{grid-template-columns:56px minmax(0,1fr)}
+  body .workspace-body .mission-art{width:56px;padding:4px}
+  body .workspace-body .vault-stage,body .workspace-body .rest-stage,body .workspace-body .skill-stage{grid-template-columns:minmax(0,1fr)}
+  body .workspace-body .morale-dial,body .workspace-body .skill-core{justify-self:center}
+  body .mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr));min-height:68px;overflow:visible}
+  body .game-hud .status-item strong{font-size:14px}
+  body .shop-spot{max-width:46%;padding:8px;grid-template-columns:minmax(0,1fr) 16px}
+  body .shop-spot>span{font-size:14px}
+  body .shop-spot small{font-size:14px;overflow-wrap:normal}
+  body .spot-events{top:40%}body .spot-crew{top:49%}body .spot-gear{top:62%}body .spot-counter{bottom:3%}
+  body .shop-caption{bottom:4px;font-size:14px}
+  body .modal-head,body .modal-body{padding:16px}
+}
