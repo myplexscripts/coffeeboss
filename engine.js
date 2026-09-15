@@ -24,7 +24,7 @@ function saveState(silent=false){
   localStorage.setItem(SAVE_KEY, JSON.stringify(state));
   if(!silent) toast('Game saved.');
 }
-function xpNeeded(level){ return Math.floor(60 + (level-1)*34 + Math.pow(level-1,1.35)*7); }
+function xpNeeded(level){ return Math.floor(80 + (level-1)*44 + Math.pow(level-1,1.4)*10); }
 function levelCheck(){
   let levelled = false;
   while(state.xp >= xpNeeded(state.level)){

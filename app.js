@@ -7,8 +7,8 @@ document.addEventListener('click',e=>{
 document.getElementById('saveButton').addEventListener('click',()=>saveState());
 document.getElementById('settingsButton').addEventListener('click',showSettings);
 window.addEventListener('beforeunload',()=>saveState(true));
-setInterval(()=>{ updateTimers(); saveState(true); renderStats(); coffeeRefreshRadars(); },10000);
-setInterval(()=>{ if(currentPage==='home'||currentPage==='breakroom') render(); },60000);
+setInterval(()=>{ if(window.coffeeRevealBusy)return; updateTimers(); saveState(true); renderStats(); coffeeRefreshRadars(); },10000);
+setInterval(()=>{ if(!window.coffeeRevealBusy&&(currentPage==='home'||currentPage==='breakroom')) render(); },60000);
 
 render();
 if(!state.bossStyle) setTimeout(showBossStyle,120);

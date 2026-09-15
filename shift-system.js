@@ -26,7 +26,7 @@ const coffeeShiftWeights = {
 };
 
 function coffeeShiftWeight(shift){
-  return coffeeShiftWeights[shift.id] || {speed:.7,craft:.7,service:.7,teamwork:.7,composure:.7};
+  return shift.weights || coffeeShiftWeights[shift.id] || {speed:.7,craft:.7,service:.7,teamwork:.7,composure:.7};
 }
 
 function coffeePlayerTraits(shift){
@@ -45,6 +45,7 @@ function coffeePlayerTraits(shift){
 }
 
 function coffeeShiftRequirements(shift){
+  if(shift.requirements)return shift.requirements;
   const weights = coffeeShiftWeight(shift);
   // The regulars are the safe learning batch; everything else asks for growth.
   if(shift.id==='open')return Object.fromEntries(coffeeShiftTraits.map(t=>[t.id,1]));
@@ -84,7 +85,7 @@ function coffeeTraitHeatmap(shift){
   const coords = p => p.map(n => n.toFixed(2)).join(',');
   const polygon = values => coffeeShiftTraits.map((t,i) => coords(point(i,values[t.id]))).join(' ');
   const summary = coffeeShiftTraits.map(t => `${t.label}: ${player[t.id].toFixed(1)} crew, ${requirements[t.id]} required`).join('; ');
-  return `<figure class="skill-radar" data-shift="${shift.id}" data-traits="${coffeeShiftTraits.map(t=>player[t.id]).join(',')}" aria-label="${shift.name}: crew skill comparison">
+  return `<figure class="skill-radar" data-shift="${shift.id}" data-traits="${coffeeShiftTraits.map(t=>`${player[t.id]}:${requirements[t.id]}`).join(',')}" aria-label="${shift.name}: crew skill comparison">
     <div class="radar-plot">
       <svg class="radar-chart" viewBox="0 0 240 240" role="img" aria-label="${coverage.percent}% of requirements covered. ${summary}">
         ${[2,4,6,8,10].map(v => `<polygon class="radar-ring" points="${coffeeShiftTraits.map((t,i) => coords(point(i,v))).join(' ')}"/>`).join('')}
@@ -98,12 +99,12 @@ function coffeeTraitHeatmap(shift){
     <figcaption>
       <div class="radar-legend"><span class="radar-key required">Required</span><span class="radar-key crew">Your crew</span></div>
       <strong class="radar-coverage">${icon(coverage.met===5?'circle-check':'scan')} ${coverage.percent}% covered</strong>
-      <span class="radar-status">${coverage.met===5?'All five skills meet the batch':`${coverage.met} of 5 skills meet the batch`}</span>
+      <span class="radar-status">${coverage.met===5?'All five skills ready':`${coverage.met} of 5 skills ready`}</span>
     </figcaption>
     <details class="radar-details"><summary>Skill details</summary>
       <div class="radar-values-heading"><span>Skill</span><span>Required</span><span>Your crew</span></div>
       ${coffeeShiftTraits.map(t => `<div class="radar-value-row"><span class="radar-trait ${t.color}" role="img" aria-label="${t.label}" title="${t.label}">${icon(t.icon)}</span><span class="radar-needed">${requirements[t.id]}</span><span class="radar-yours">${player[t.id].toFixed(1)} ${icon(player[t.id]>=requirements[t.id]?'check':'arrow-down')}</span></div>`).join('')}
-      <p>Skills start at 1 and grow to 10. Gear, crew, upgrades and practice build your shape. The regulars are a safe place to start; new batches need more preparation.</p>
+      <p>Skills start at 1 and grow to 10. Gear, crew, upgrades and practice build your shape. Cover the green shape before taking on tougher rounds.</p>
     </details>
   </figure>`;
 }
@@ -111,10 +112,11 @@ function coffeeTraitHeatmap(shift){
 function coffeeRefreshRadars(){
   let changed=false;
   document.querySelectorAll('.skill-radar[data-shift]').forEach(chart=>{
-    const shift=shifts.find(s=>s.id===chart.dataset.shift);
+    const shift=typeof coffeeFindActivity==='function'?coffeeFindActivity(chart.dataset.shift):shifts.find(s=>s.id===chart.dataset.shift);
     if(!shift)return;
     const player=coffeePlayerTraits(shift);
-    if(chart.dataset.traits===coffeeShiftTraits.map(t=>player[t.id]).join(','))return;
+    const requirements=coffeeShiftRequirements(shift);
+    if(chart.dataset.traits===coffeeShiftTraits.map(t=>`${player[t.id]}:${requirements[t.id]}`).join(','))return;
     const detailsOpen=chart.querySelector('details')?.open;
     const focused=chart.contains(document.activeElement);
     const template=document.createElement('template');
@@ -142,7 +144,7 @@ function coffeeShiftMatch(shift){
   return weighted / Math.max(.01,totalWeight);
 }
 
-function coffeeResolveShift(shift){
+function coffeeActivityRoll(shift){
   const match = coffeeShiftMatch(shift);
   const mastery = state.shiftMastery[shift.id] || 0;
   const masteryBonus = Math.min(7, mastery / 45);
@@ -156,6 +158,11 @@ function coffeeResolveShift(shift){
   else if(score >= 66) tier = 'strong';
   else if(score >= 40) tier = 'complete';
 
+  return {score,match,tier};
+}
+
+function coffeeResolveShift(shift){
+  const {score,match,tier}=coffeeActivityRoll(shift);
   const payoutBase = Math.floor(shift.cash[0] + Math.random() * (shift.cash[1] - shift.cash[0] + 1));
   const multipliers = {
     miss:{cash:0,xp:.42,mastery:.35,label:'SHIFT MISSED',tone:'miss'},
@@ -172,7 +179,7 @@ function coffeeResolveShift(shift){
     label:m.label,
     tone:m.tone,
     cash:Math.floor(payoutBase * m.cash),
-    xp:Math.max(1,Math.round(shift.xp * m.xp)),
+    xp:Math.max(1,Math.round(shift.xp * m.xp * Math.max(.25,1-Math.max(0,state.level-shift.level-2)*.10))),
     mastery:Math.max(1,Math.round(shift.mastery * m.mastery)),
     energyCost:shift.energy,
     energyRefund:tier === 'perfect' ? Math.max(1,Math.round(shift.energy * .45)) : 0

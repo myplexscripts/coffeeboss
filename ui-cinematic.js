@@ -267,18 +267,19 @@ renderShifts=function(){
 
 renderRivals=function(){
   const rivals=rivalList();
-  const extras=`<div class="scene-inline-facts">${cbxReadout('Your attack',totalService(),'gauge','service')}${cbxReadout('Your defence',totalQuality(),'shield-check','quality')}${cbxReadout('Record',`${state.rivalsBeaten}W / ${state.rivalLosses}L`,'trophy')}</div>`;
+  const extras=`<div class="scene-inline-facts">${cbxReadout('Rivals beaten',`${Object.keys(state.rivalWins||{}).length}/${rivals.length}`,'trophy')}${cbxReadout('Drive',`${state.drive}/${state.maxDrive}`,'flame','drive')}${cbxReadout('Record',`${state.rivalsBeaten}W / ${state.rivalLosses}L`,'trophy')}</div>`;
   return `<div class="scene-screen rivals-scene">
     ${cbxSceneIntro('rivals',extras)}
     <div class="rival-board">${rivals.map((r,i)=>{
-      const compare=(totalService()+totalQuality())-(r.service+r.quality);
-      const label=compare>25?'Favourable':compare>-10?'Close':'Tough';
+      const profile=coffeeRivalProfile(r);
+      const coverage=coffeeTraitCoverage(coffeeShiftRequirements(profile),coffeePlayerTraits(profile)).percent;
+      const label=coverage>=100?'Ready':coverage>=80?'A stretch':'Build your crew';
       return `<article class="matchup ${cbDifficultyClass(label)}">
         <div class="matchup-banner"><span class="matchup-rank">#${i+1}</span><span class="matchup-mark">${icon('store')}</span><span class="matchup-difficulty">${label}</span></div>
         <div class="matchup-name"><span>LEVEL ${r.level} · ${r.crew} CREW</span><h2>${r.name}</h2></div>
-        <div class="versus-line"><span><small>SERVICE</small><strong>${r.service}</strong></span><b>VS</b><span><small>QUALITY</small><strong>${r.quality}</strong></span></div>
-        <div class="matchup-prize"><span>${icon('banknote')} WIN UP TO</span><strong>${formatMoney(Math.floor(r.cash*1.4))}</strong></div>
-        <button data-action="rival" data-index="${i}" data-name="${r.name}" ${state.drive<1||state.morale<8?'disabled':''}>${icon('swords')} TAKE THEM ON <span>1 Drive</span></button>
+        ${coffeeTraitHeatmap(profile)}
+        <div class="matchup-prize"><span>${icon('banknote')} ${(state.rivalWins||{})[r.id]?'REMATCH REWARD':'FIRST WIN'}</span><strong>${formatMoney((state.rivalWins||{})[r.id]?Math.floor(r.cash*.35):r.cash)}</strong></div>
+        <button data-action="rival" data-index="${i}" data-name="${r.name}" ${state.drive<1||state.morale<8||state.level<r.level?'disabled':''}>${icon('swords')} ${state.level<r.level?`LEVEL ${r.level}`:'TAKE THEM ON'} <span>1 Drive</span></button>
       </article>`;
     }).join('')}</div>
   </div>`;
@@ -346,7 +347,7 @@ renderCrew=function(){
 };
 
 function cbxChallenge(type,iconName,title,copy,reward){
-  return `<article class="event-poster event-${type}"><div class="event-light"></div><div class="event-art">${icon(iconName)}</div><span class="event-kicker">ONE TOKEN EVENT</span><h2>${title}</h2><p>${copy}</p><div class="event-reward">${icon('gift')}<span>${reward}</span></div><button data-action="challenge" data-type="${type}" data-name="${title}" ${state.challengeTokens<1?'disabled':''}>ENTER EVENT ${icon('arrow-right')}</button></article>`;
+  return `<article class="event-poster event-${type}"><div class="event-light"></div><div class="event-art">${icon(iconName)}</div><span class="event-kicker">ROUND ${coffeeEventTier(type)} · ${(state.eventWins?.[type]||0)%3}/3 WINS TO ADVANCE</span><h2>${title}</h2><p>${copy}</p><div class="event-reward">${icon('gift')}<span>${reward}</span></div>${coffeeTraitHeatmap(coffeeEventProfile(type))}<button data-action="challenge" data-type="${type}" data-name="${title}" ${state.challengeTokens<1?'disabled':''}>ENTER EVENT ${icon('arrow-right')}</button></article>`;
 }
 
 function cbxBossStage(b){
@@ -358,8 +359,8 @@ function cbxBossStage(b){
   return `<article class="boss-stage ${defeated?'defeated':''}">
     <div class="boss-stage-art">${icon(b.icon)}<span>${defeated?'CLEARED':unlocked?'READY':`LEVEL ${b.level}`}</span></div>
     <div class="boss-stage-copy"><span>MAJOR CHALLENGE</span><h2>${b.name}</h2><p>${b.description}</p><div class="boss-rewards">${cbResourceChip('cash','banknote','Reward',formatMoney(b.reward))}${cbResourceChip('xp','sparkles','XP',b.xp)}</div></div>
-    <div class="boss-stage-pressure"><div><span>${defeated?'CHALLENGE COMPLETE':'WORK REMAINING'}</span><strong>${defeated?'DONE':remain}</strong></div><div class="pressure-track"><span style="width:${pct}%"></span></div>
-      ${unlocked&&!defeated?`<p class="challenge-instructions">Complete this challenge over several attempts. Each attempt reduces what is left. A full effort makes about 2.65× the progress, but wears down more Morale. You need at least 10 Morale to attempt either.</p><div class="boss-stage-actions"><button data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="0" ${state.drive<1||state.morale<10?'disabled':''}>STANDARD ATTEMPT <span>1 Drive</span></button><button class="power" data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="1" ${state.drive<3||state.morale<10?'disabled':''}>FULL EFFORT <span>3 Drive</span></button></div>`:''}
+    ${coffeeTraitHeatmap(coffeeBossProfile(b))}<div class="boss-stage-pressure"><div><span>${defeated?'CHALLENGE COMPLETE':'WORK REMAINING'}</span><strong>${defeated?'DONE':remain}</strong></div><div class="pressure-track"><span style="width:${pct}%"></span></div><div class="boss-milestones" aria-label="Challenge milestones">${[25,50,75,100].map(n=>`<span class="${pct>=n?'reached':''}">${icon(pct>=n?'circle-check':'circle')} ${n}%</span>`).join('')}</div>
+      ${unlocked&&!defeated?`<p class="challenge-instructions">Complete this challenge over several attempts. Successful attempts reduce what is left. A full effort makes 2.4× the progress and costs more Morale. Meet the skills first: a missed attempt makes no progress. You need at least 10 Morale to attempt either.</p><div class="boss-stage-actions"><button data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="0" ${state.drive<1||state.morale<10?'disabled':''}>STANDARD ATTEMPT <span>1 Drive</span></button><button class="power" data-action="boss" data-id="${b.id}" data-name="${b.name}" data-power="1" ${state.drive<3||state.morale<10?'disabled':''}>FULL EFFORT <span>3 Drive</span></button></div>`:''}
     </div>
   </article>`;
 }
@@ -369,7 +370,7 @@ renderChallenges=function(){
   const extras=`<div class="scene-inline-facts">${cbxReadout('Event tokens',`${state.challengeTokens}/${state.maxChallengeTokens}`,'ticket','xp')}${cbxReadout('Next token','1 hour','timer')}</div>`;
   return `<div class="scene-screen challenges-scene">
     ${cbxSceneIntro('challenges',extras)}
-    <section class="event-marquee">${cbxChallenge('latte','palette','Latte Art Throwdown','Make something worth putting on the counter, then hope the judges agree.','Cash and XP')}${cbxChallenge('speed','timer','Speed Service Round','Send the crew through a busy run for a quick pick-me-up.','XP and Energy')}${cbxChallenge('crate','package-search','Mystery Supply Crate','You will leave with cash or a new piece of gear.','Cash or gear')}</section>
+    <section class="event-marquee">${cbxChallenge('latte','palette','Latte Art Throwdown','Make something worth putting on the counter, then hope the judges agree.','Cash and XP')}${cbxChallenge('speed','timer','Speed Service Round','Send the crew through a busy run for a quick pick-me-up.','XP and Energy')}${cbxChallenge('crate','package-search','Supply Run','Bring back the order intact. A clean run earns supplies or cash.','Cash or gear')}</section>
     <div class="chapter-break"><span>THE BIG TESTS</span><p>Progress is saved. Every attempt gets you closer to completing the challenge.</p></div>
     <section class="boss-run">${active.length?active.map(cbxBossStage).join(''):`<div class="locked-challenge">${icon('lock-keyhole')}<h2>Your first major challenge arrives at Level 4</h2><p>Keep working. Word about the shop is starting to travel.</p></div>`}</section>
   </div>`;
@@ -431,7 +432,6 @@ function cbxReportToken(iconName,label,value,tone=''){
 
 function cbxShowActionReport(report){
   if(!report) return false;
-  if(report.brief){cbxOriginalToast(`${report.title}. ${report.copy}`,'good');return true;}
   document.querySelector('.action-report-layer')?.remove();
   const returnFocus=document.activeElement;
   const layer=document.createElement('dialog');

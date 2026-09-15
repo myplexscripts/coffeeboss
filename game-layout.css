@@ -1,0 +1,94 @@
+/* Full-page workspaces, one surface palette, and a single result stage. */
+body .main-content{overflow:visible;padding-bottom:104px}
+body .shop-workspace{width:100%;max-width:none;margin:0;min-height:calc(100dvh - 180px);border:0;border-radius:0;box-shadow:none;background:#1d322c;overflow:visible}
+body .workspace-bar{padding:12px 24px;background:#1a3028;border-bottom:1px solid var(--edge)}
+body .workspace-body{max-height:none!important;min-height:0;overflow:visible;overscroll-behavior:auto;scrollbar-gutter:auto;padding:24px}
+body .workspace-intro{margin-bottom:16px}
+body .workspace-intro>p{max-width:800px;margin-bottom:8px}
+body .scene-inline-facts{margin:8px 0}
+body .resource-guide{margin:8px 0}
+body .game-hud{padding:8px 24px}
+body .mobile-nav{width:calc(100% - 32px);max-width:none;bottom:8px;border-radius:12px}
+body .workspace-body :is(.crew-stage,.rival-board,.event-marquee,.boss-run,.locker,.mission-board,.rest-stage,.boost-station,.skill-branches){background:none;box-shadow:none}
+body .workspace-body .mission-list{grid-template-columns:repeat(auto-fit,minmax(min(100%,560px),1fr));align-items:start}
+body .workspace-body .mission{grid-template-columns:48px minmax(0,1fr) 220px;gap:16px;align-items:center}
+body .workspace-body .mission-art{width:48px;min-height:64px;align-self:center}
+body .workspace-body .mission-art span{display:none}
+body .workspace-body .mission-copy{align-self:center}
+body .workspace-body .mission>.skill-radar{grid-column:3;grid-row:1}
+body .radar-plot{width:min(100%,220px)}
+body .radar-legend{gap:12px}
+body .radar-coverage{font-size:18px}
+body .radar-status{line-height:1.3}
+body .radar-details{margin-top:4px}
+body .workspace-body :is(.rival-board,.event-marquee){grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));align-items:start}
+body .workspace-body .matchup{display:flex;flex-direction:column;gap:12px;padding:16px}
+body .workspace-body :is(.matchup-name,.matchup-prize){padding:0}
+body .workspace-body .matchup>button{margin:0;width:100%}
+body .workspace-body .matchup-banner{height:auto;min-height:36px;padding:0;background:none;display:flex;justify-content:space-between;align-items:center}
+body .workspace-body .matchup-banner::before,body .workspace-body .matchup-banner::after,body .workspace-body .matchup-mark{display:none}
+body .workspace-body :is(.matchup-rank,.matchup-difficulty){position:static;padding:6px 8px;transform:none;border-radius:8px;background:var(--surface-inset);color:var(--text)}
+body .workspace-body .event-art{display:none}
+body .workspace-body .event-poster{display:flex;flex-direction:column;align-items:stretch;gap:12px;text-align:left;background:var(--surface)}
+body .workspace-body .event-light,body .workspace-body .event-poster::after{display:none}
+body .workspace-body .event-poster h2{margin:0}
+body .workspace-body .event-reward{margin:0}
+body .workspace-body .boss-stage{display:grid;grid-template-columns:minmax(240px,1fr) 240px minmax(240px,1fr);align-items:center;gap:24px}
+body .workspace-body .boss-stage-art{display:none}
+body .workspace-body .boss-stage-pressure{grid-column:auto;width:100%;min-width:0}
+body .boss-milestones{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:12px;color:var(--text-soft)}
+body .boss-milestones span{display:inline-flex;align-items:center;gap:4px;font-size:14px;letter-spacing:0}
+body .boss-milestones svg{width:18px;height:18px}
+body .boss-milestones .reached{color:var(--cash)}
+body .workspace-body .crew-call{min-height:0;padding:16px;grid-template-columns:56px minmax(0,1fr) auto}
+body .workspace-body .crew-call-art{width:48px;height:48px;box-shadow:none;background:none}
+body .workspace-body .crew-call h2{font-size:22px}
+body .workspace-body .crew-call>div>span{display:none}
+body .workspace-body .crew-lineup{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+body .workspace-body .crew-portrait{width:72px;height:72px}
+body .workspace-body .crew-card-power{display:flex;align-items:center;gap:12px;border:0;padding:0;justify-content:flex-start}
+body .workspace-body .crew-card-power strong{font-size:20px}
+body .workspace-body .vault-stage{grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));align-items:start}
+body .workspace-body .vault-console{display:grid;grid-template-columns:56px minmax(0,1fr);gap:8px 16px;align-content:start;padding:16px}
+body .workspace-body .vault-art{grid-column:1;grid-row:1/3;width:48px;height:48px;align-self:center;background:none;box-shadow:none;margin:0}
+body .workspace-body .vault-art svg{width:32px;height:32px}
+body .workspace-body .vault-console>span{grid-column:2;font-size:14px}
+body .workspace-body .vault-console h2{grid-column:2;margin:0;font-size:28px}
+body .workspace-body .vault-console p{grid-column:1/-1;margin:8px 0;font-size:14px}
+body .workspace-body .vault-console label{grid-column:1/-1;margin:0;font-size:14px}
+body .workspace-body .vault-input{grid-column:1/-1;display:grid;grid-template-columns:minmax(110px,1fr) minmax(0,1fr);gap:8px;margin:0}
+body .workspace-body .vault-input button{font-size:14px;margin:0}
+body .action-report-layer .action-report{width:min(680px,100%);min-height:0;border:1px solid var(--edge);background:var(--surface);padding:24px;gap:16px}
+body .action-report .report-icon{width:72px;height:72px;margin:0;box-shadow:none;background:var(--surface-inset)}
+body .action-report h2{font-size:clamp(24px,3vw,36px);line-height:1.15}
+body .action-report p{font-size:16px;line-height:1.5}
+body .action-report-layer{padding:16px;overflow:auto}
+body .challenge-reveal{background:#10241ff5}
+body .reveal-panel{opacity:1;transform:none;transition:none}
+body .reveal-stage{height:180px;width:100%;position:relative;margin:8px 0 0;padding:0 12px}
+body .reveal-ball{position:absolute;left:50%;bottom:52px;width:22px;height:22px;border-radius:50%;background:#f2c574;border:3px solid #fff1cc;box-shadow:0 0 20px #f2c57455;will-change:transform,left;pointer-events:none}
+body .reveal-lane{position:absolute;inset:auto 0 0;display:grid;grid-template-columns:40fr 26fr 18fr 16fr;gap:2px;min-height:44px;align-items:stretch}
+body .reveal-lane span{display:grid;place-items:center;background:#33453b;border-top:4px solid #f19ea8;font-size:14px;padding:8px 0;color:var(--text)}
+body .reveal-lane span:nth-child(2){border-color:var(--cash)}
+body .reveal-lane span:nth-child(3){border-color:var(--energy)}
+body .reveal-lane span:nth-child(4){border-color:#f2c574}
+body .reveal-hint{font-size:14px;color:var(--text-soft)}
+body .toast-region,body .reward-burst{display:none}
+@media(max-width:900px){
+  body .workspace-body .boss-stage{grid-template-columns:minmax(0,1fr) 240px}
+  body .workspace-body .boss-stage-pressure{grid-column:1/-1}
+}
+@media(max-width:600px){
+  body .workspace-body{padding:16px}
+  body .workspace-bar{padding:8px 16px}
+  body .workspace-body .mission{grid-template-columns:48px minmax(0,1fr);gap:12px}
+  body .workspace-body .mission>.skill-radar{grid-column:1/-1;grid-row:2;width:100%}
+  body .workspace-body .boss-stage{grid-template-columns:minmax(0,1fr)}
+  body .workspace-body .boss-stage>.skill-radar{justify-self:center;width:100%}
+  body .workspace-body .crew-call{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+  body .workspace-body .crew-call-art{display:none}
+  body .workspace-body .vault-input{grid-template-columns:minmax(0,1fr)}
+  body .action-report-layer .action-report{padding:16px}
+  body .reveal-lane span{font-size:14px;writing-mode:horizontal-tb}
+  body .reveal-stage{height:150px}
+}

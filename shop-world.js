@@ -37,7 +37,7 @@ renderHome=function(){
 cbxSceneIntro=function(scene,extras=''){
   const copy={
     shifts:['Pick your next batch','Spend Energy to earn cash and XP. The shop stays open between batches.'],
-    rivals:['Who are we taking on?','Service is your attack. Quality limits the Morale you lose. Start with a favourable match.'],
+    rivals:['Who are we taking on?','Green is the rival’s challenge. Gold is your crew. Build the skills you are missing, then take them on.'],
     locations:['A little shop. A bigger town.','Each spot earns cash every minute. Open one, then expand when you can afford it.'],
     stockroom:['Make every cup count','Buy gear once. Your best pieces work automatically, with slots supplied by your crew.'],
     crew:['Room for one more','Each hire adds power and another gear slot.'],
@@ -46,22 +46,22 @@ cbxSceneIntro=function(scene,extras=''){
     breakroom:['The next rush can wait','Restore Morale here before facing more pressure.'],
     profile:['Your kind of boss','Spend skill points to improve the way you like to play.']
   }[scene];
-  return `${workspaceScene(scene)}<header class="workspace-intro"><h2>${copy[0]}</h2><p>${copy[1]}</p>${extras}${cbxResourceGuide(scene)}</header>`;
+  return `<header class="workspace-intro"><h2>${copy[0]}</h2><p>${copy[1]}</p>${extras}${cbxResourceGuide(scene)}</header>`;
 };
 
 const shopBaseRender=render;
 render=function(){
   const main=document.getElementById('main');
   const oldPage=main.dataset.page;
-  const scroll=main.querySelector('.workspace-body')?.scrollTop||0;
+  const scroll=window.scrollY;
   const active=document.activeElement;
   const focusData=active?.closest('#main')?{action:active.dataset.action,id:active.dataset.id,tab:active.dataset.tab}:null;
   shopBaseRender();
   if(currentPage!=='home'){
     const content=main.innerHTML;
-    main.innerHTML=`<div class="shop-backdrop">${shopRoom(false)}</div><section class="shop-workspace" aria-labelledby="workspaceTitle"><header class="workspace-bar"><button class="workspace-back" data-action="nav" data-page="home" aria-label="Back to your shop">${icon('arrow-left')}<span>Shop</span></button><h1 id="workspaceTitle">${shopPageNames[currentPage]||'Your shop'}</h1><span class="workspace-level">LV ${state.level}</span></header><div class="workspace-body">${content}</div></section>`;
+    main.innerHTML=`<section class="shop-workspace" aria-labelledby="workspaceTitle"><header class="workspace-bar"><button class="workspace-back" data-action="nav" data-page="home" aria-label="Back to your shop">${icon('arrow-left')}<span>Shop</span></button><h1 id="workspaceTitle">${shopPageNames[currentPage]||'Your shop'}</h1><span class="workspace-level">LV ${state.level}</span></header><div class="workspace-body">${content}</div></section>`;
     bindPageActions();
-    if(oldPage===currentPage)main.querySelector('.workspace-body').scrollTop=scroll;
+    if(oldPage===currentPage)window.scrollTo({top:scroll,behavior:'instant'});
   }
   lucide.createIcons();
   if(oldPage!==currentPage)main.focus({preventScroll:true});

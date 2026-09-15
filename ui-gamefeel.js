@@ -394,8 +394,8 @@ renderBreakroom = function(){
 };
 
 const cbSkillData = [
-  ['service','gauge','Service','Hit harder in rival + major challenges.',1,'service'],
-  ['quality','badge-check','Quality','Reduce pressure when rivals push back.',1,'quality'],
+  ['service','gauge','Service','Build Speed and Service for tougher challenges.',1,'service'],
+  ['quality','badge-check','Quality','Build Craft and Service for tougher challenges.',1,'quality'],
   ['energy','zap','Energy','Work more shifts before waiting.',1,'energy'],
   ['drive','flame','Drive','Challenge more rivals in one run.',1,'drive'],
   ['morale','heart-pulse','Morale','Stay in major challenges longer.',10,'morale']
