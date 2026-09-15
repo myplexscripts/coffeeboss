@@ -69,7 +69,7 @@ function symboliseResources(root){
     const node=walker.currentNode;
     if(node.parentElement?.closest('script,style,svg,textarea,option,.resource-symbol,.workspace-scene,.crew-card-copy,.shop-caption'))continue;
     const heading=node.parentElement?.closest('h1,h2,h3');
-    if(heading&&[...items,...shifts,...locations,...bosses].some(item=>item.name===heading.textContent))continue;
+    if(heading&&(heading.closest('.event-poster')||[...items,...shifts,...locations,...bosses,...collections].some(item=>item.name===heading.textContent)))continue;
     resourceWords.lastIndex=0;if(resourceWords.test(node.nodeValue))nodes.push(node);
   }
   for(const node of nodes){

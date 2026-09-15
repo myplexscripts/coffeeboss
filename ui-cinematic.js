@@ -369,7 +369,7 @@ renderChallenges=function(){
   const extras=`<div class="scene-inline-facts">${cbxReadout('Event tokens',`${state.challengeTokens}/${state.maxChallengeTokens}`,'ticket','xp')}${cbxReadout('Next token','1 hour','timer')}</div>`;
   return `<div class="scene-screen challenges-scene">
     ${cbxSceneIntro('challenges',extras)}
-    <section class="event-marquee">${cbxChallenge('latte','palette','Latte Art Throwdown','Make something worth putting on the counter, then hope the judges agree.','Cash and XP')}${cbxChallenge('speed','timer','Speed Service Round','A short, frantic run where every second matters.','XP and Energy')}${cbxChallenge('crate','package-search','Mystery Supply Crate','You will leave with cash or a new piece of gear.','Cash or gear')}</section>
+    <section class="event-marquee">${cbxChallenge('latte','palette','Latte Art Throwdown','Make something worth putting on the counter, then hope the judges agree.','Cash and XP')}${cbxChallenge('speed','timer','Speed Service Round','Send the crew through a busy run for a quick pick-me-up.','XP and Energy')}${cbxChallenge('crate','package-search','Mystery Supply Crate','You will leave with cash or a new piece of gear.','Cash or gear')}</section>
     <div class="chapter-break"><span>THE BIG TESTS</span><p>Progress is saved. Every attempt gets you closer to completing the challenge.</p></div>
     <section class="boss-run">${active.length?active.map(cbxBossStage).join(''):`<div class="locked-challenge">${icon('lock-keyhole')}<h2>Your first major challenge arrives at Level 4</h2><p>Keep working. Word about the shop is starting to travel.</p></div>`}</section>
   </div>`;
@@ -398,10 +398,10 @@ renderBreakroom=function(){
       <div class="rest-copy"><span>HOW EVERYONE IS DOING</span><h2>${state.morale>75?'The crew is feeling good.':state.morale>35?'They could use a minute.':'Everyone is running on fumes.'}</h2><p>Morale comes back with time. If you need the crew ready now, cover a proper reset from the till.</p><button data-action="heal" ${missing<=0||state.cash<cost?'disabled':''}><span>${missing<=0?'MORALE IS FULL':'GIVE EVERYONE A RESET'}</span>${missing>0?`<strong>${formatMoney(cost)}</strong>`:''}</button></div>
     </section>
     <section class="boost-station"><div class="boost-heading"><span>SPEND A BOSS POINT</span><p>A one-off boost when waiting is not an option.</p></div><div class="boost-controls">
-      <button class="energy" data-action="boss-point" data-type="energy" ${state.bossPoints<1?'disabled':''}>${icon('zap')}<span>FILL ENERGY</span><small>1 point</small></button>
-      <button class="drive" data-action="boss-point" data-type="drive" ${state.bossPoints<1?'disabled':''}>${icon('flame')}<span>FILL DRIVE</span><small>1 point</small></button>
-      <button class="morale" data-action="boss-point" data-type="morale" ${state.bossPoints<1?'disabled':''}>${icon('heart-pulse')}<span>FILL MORALE</span><small>1 point</small></button>
-      <button class="cash" data-action="boss-point" data-type="cash" ${state.bossPoints<1?'disabled':''}>${icon('banknote')}<span>GET CASH</span><small>1 point</small></button>
+      <button class="energy" data-action="boss-point" data-type="energy" ${state.bossPoints<1?'disabled':''}><span>FILL ENERGY</span><small>1 Boss point</small></button>
+      <button class="drive" data-action="boss-point" data-type="drive" ${state.bossPoints<1?'disabled':''}><span>FILL DRIVE</span><small>1 Boss point</small></button>
+      <button class="morale" data-action="boss-point" data-type="morale" ${state.bossPoints<1?'disabled':''}><span>FILL MORALE</span><small>1 Boss point</small></button>
+      <button class="cash" data-action="boss-point" data-type="cash" ${state.bossPoints<1?'disabled':''}><span>GET CASH</span><small>1 Boss point</small></button>
     </div></section>
   </div>`;
 };
