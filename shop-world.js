@@ -16,7 +16,6 @@ function shopRoom(interactive=true){
     <div class="shop-menu"><b>ON THE MENU</b><span>Espresso · Latte</span><span>Good coffee. No rush.</span><hr><strong>Fresh batch, coming up.</strong></div>
     <div class="shop-board"><b>WHAT'S ON</b><i>LATTE ART</i><i>LOCAL RIVALS</i></div>
     <div class="shop-plant"><i></i><i></i><i></i><b></b></div>
-    <div class="shop-barista">${shopAvatar(state.crew[0]?.name||'Maya')}<span>${state.crew.length===1?'Maya':`${state.crew.length} crew`}</span></div>
     <div class="shop-machine"><div class="machine-controls"><i></i><i></i><i></i></div><div class="machine-spouts"></div><div class="machine-cup"></div><span class="coffee-steam"></span></div>
     <div class="shop-counter"><span>COFFEE <b>BOSS</b></span><div class="counter-stripes"></div></div>
     <div class="shop-cups"><i></i><i></i><i></i></div>
@@ -47,7 +46,7 @@ cbxSceneIntro=function(scene,extras=''){
     breakroom:['The next rush can wait','Restore Morale here before facing more pressure.'],
     profile:['Your kind of boss','Spend skill points to improve the way you like to play.']
   }[scene];
-  return `<header class="workspace-intro"><h2>${copy[0]}</h2><p>${copy[1]}</p>${extras}${cbxResourceGuide(scene)}</header>`;
+  return `${workspaceScene(scene)}<header class="workspace-intro"><h2>${copy[0]}</h2><p>${copy[1]}</p>${extras}${cbxResourceGuide(scene)}</header>`;
 };
 
 const shopBaseRender=render;

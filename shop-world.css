@@ -108,6 +108,12 @@ button:focus-visible,[role=button]:focus-visible,summary:focus-visible{outline:3
 .shop-barista>.micah-avatar{position:absolute;bottom:0;width:100%;height:auto;aspect-ratio:1;object-fit:contain}
 .skill-core>span:has(.micah-avatar){width:112px;height:112px;padding:0;overflow:hidden;border-radius:50%;background:#dfd5b8}
 .nav-desktop-only{display:none}
+.workspace-scene{margin:0 0 24px;overflow:hidden;border-radius:8px;background:#263e31}
+.workspace-scene>svg{display:block;width:100%;height:clamp(170px,26vw,300px)}
+.workspace-scene>figcaption{padding:10px 16px;font-size:13px;line-height:1.5;color:#d7ddc6}
+.workspace-scene .scene-steam{animation:scene-steam-rise 4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes scene-steam-rise{0%,100%{opacity:.15;transform:translateY(3px)}50%{opacity:.8;transform:translateY(-5px)}}
+@media(prefers-reduced-motion:reduce){.workspace-scene .scene-steam{animation:none}}
 @media(min-width:701px){
   .mobile-nav{width:min(1100px,calc(100% - 32px));grid-template-columns:repeat(11,minmax(0,1fr))}
   .mobile-nav .nav-desktop-only{display:flex}
