@@ -5,8 +5,8 @@ const path=require('node:path');
 const vm=require('node:vm');
 
 function game(save=null){
-  const context=vm.createContext({localStorage:{getItem:()=>save},performShift:null,renderShifts:null});
-  for(const file of ['data.js','engine.js','shift-system.js','landing-mechanic.js']){
+  const context=vm.createContext({localStorage:{getItem:()=>save},performShift:null,renderShifts:null,render:()=>{},toast:()=>{}});
+  for(const file of ['data.js','engine.js','shift-system.js','challenge-rules.js','difficulty-balance.js','landing-mechanic.js']){
     vm.runInContext(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),context);
   }
   return code=>vm.runInContext(code,context);
@@ -53,6 +53,30 @@ test('the sampled landing point itself decides success',()=>{
   assert.equal(consistent,true);
 });
 
+test('physics launch aims at the highest requirement and defaults right when pressure is even',()=>{
+  const run=game();
+  const equal=run('coffeeLaunchDirection({speed:2,craft:2,service:2,teamwork:2,composure:2})');
+  assert.ok(equal.x>.999);
+  assert.ok(Math.abs(equal.y)<1e-7);
+  assert.equal(equal.trait,null);
+  const craft=run('coffeeLaunchDirection({speed:2,craft:5,service:2,teamwork:2,composure:2})');
+  assert.equal(craft.trait,'craft');
+  assert.ok(craft.x>0&&craft.y<0);
+});
+
+test('physics trajectory remains inside green and begins along the launch vector',()=>{
+  const run=game();
+  const result=run(`(()=>{
+    const required={speed:2,craft:5,service:3,teamwork:2.5,composure:2};
+    const launch=coffeeLaunchDirection(required),path=coffeePhysicsTrajectory(required,{x:120,y:120});
+    const polygon=coffeeRadarPolygon(required),first=path[1];
+    const initialDot=(first.x-120)*launch.x+(first.y-120)*launch.y;
+    return {initialDot,inside:path.every(p=>coffeePointInPolygon([p.x,p.y],polygon))};
+  })()`);
+  assert.ok(result.initialDot>0);
+  assert.equal(result.inside,true);
+});
+
 test('all batches render two finite five-point shapes without changing state',()=>{
   const run=game();
   for(const level of [1,20,50]){
@@ -84,17 +108,17 @@ test('crew upgrades and morale changes update the chart from real game values',(
   assert.ok(changed.composure<initial.composure);
 });
 
-test('fresh skills start at one, and later batches need preparation',()=>{
+test('fresh serves are possible but never automatic',()=>{
   const run=game();
   assert.ok(run('Object.values(coffeePlayerTraits(shifts[0])).every(v=>v===1)'));
-  assert.equal(run('state.service'),1);
-  assert.equal(run('state.quality'),1);
   const coverage=run('shifts.slice(0,5).map(s=>coffeeTraitCoverage(coffeeShiftRequirements(s),coffeePlayerTraits(s)).percent)');
-  assert.equal(coverage[0],100);
-  assert.ok(coverage[1]<70);
-  assert.ok(coverage[4]<35);
+  assert.ok(coverage[0]>=58&&coverage[0]<=70,`regulars ${coverage[0]}%`);
+  assert.ok(coverage[1]>=40&&coverage[1]<=55,`morning ${coverage[1]}%`);
+  assert.ok(coverage[2]<40);
+  assert.ok(coverage[4]<25);
   run('state.level=5;');
-  assert.ok(run('coffeeTraitCoverage(coffeeShiftRequirements(shifts[4]),coffeePlayerTraits(shifts[4])).percent')<55);
+  const catering=run('coffeeTraitCoverage(coffeeShiftRequirements(shifts[4]),coffeePlayerTraits(shifts[4])).percent');
+  assert.ok(catering>10&&catering<40,`catering ${catering}%`);
 });
 
 function outcomes(run,index,count=4000){
@@ -138,7 +162,7 @@ test('legacy saves keep earned upgrades and migrate only once',()=>{
   assert.equal(again('state.quality'),3);
 });
 
-test('a fully developed crew reaches 100 percent and cannot miss the final batch',()=>{
+test('a fully developed crew reaches 100 percent and cannot miss old content',()=>{
   const run=game();
   run(`state.level=60;state.service=100;state.quality=100;state.jobsCompleted=2500;
     state.crew=Array.from({length:30},()=>({power:6}));state.shiftMastery.airline=1000;`);
