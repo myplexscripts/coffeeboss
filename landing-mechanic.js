@@ -173,6 +173,12 @@ function coffeePhysicsTrajectory(requirements,landing,steps=165){
       const toCenterX=center[0]-nearest.point[0],toCenterY=center[1]-nearest.point[1];
       if(toCenterX*normalX+toCenterY*normalY<0){normalX*=-1;normalY*=-1;}
       candidate=[nearest.point[0]+normalX*.75,nearest.point[1]+normalY*.75];
+      // At sharp corners one edge normal can still leave the centre outside
+      // the adjacent edge. Pull inward only as far as needed to guarantee the
+      // whole simulated path remains inside the required polygon.
+      for(let safety=0;safety<8&&!coffeePointInPolygon(candidate,polygon);safety++){
+        candidate=[(candidate[0]+center[0])*.5,(candidate[1]+center[1])*.5];
+      }
       const normalSpeed=velocity[0]*normalX+velocity[1]*normalY;
       if(normalSpeed<0){
         velocity[0]-=(1+.72)*normalSpeed*normalX;
