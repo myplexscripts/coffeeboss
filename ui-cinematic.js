@@ -256,9 +256,9 @@ renderShifts=function(){
           <div class="mission-art">${icon(s.icon)}<span>${cbxMasteryLabel(mastery)}</span></div>
           <div class="mission-copy"><span class="mission-status">${unlocked?'SHIFT AVAILABLE':`LOCKED UNTIL LEVEL ${s.level}`}</span><h2>${s.name}</h2><p>${s.description}</p>
             <div class="mission-pay">${cbResourceChip('energy','zap','Energy',s.energy)}${cbResourceChip('cash','banknote','Cash',`${formatMoney(s.cash[0])} to ${formatMoney(s.cash[1])}`)}${cbResourceChip('xp','sparkles','XP',s.xp)}</div>
+            <button class="mission-start" data-action="shift" data-id="${s.id}" ${!unlocked||!affordable?'disabled':''}>${buttonLabel}${icon('arrow-right')}</button>
           </div>
           ${coffeeTraitHeatmap(s)}
-          <button class="mission-start" data-action="shift" data-id="${s.id}" ${!unlocked||!affordable?'disabled':''}>${buttonLabel}${icon('arrow-right')}</button>
         </article>`;
       }).join('')}</div>
     </section>

@@ -35,13 +35,13 @@ body .radar-yours svg{width:16px;height:16px;flex-shrink:0}
 body .radar-details p{font-size:14px;line-height:1.5;margin:8px 0 0}
 body .workspace-body .mission{grid-template-columns:72px minmax(0,1fr) 260px;align-items:start;column-gap:24px;row-gap:16px}
 body .workspace-body .mission-number{display:none}
-body .workspace-body .mission-art{grid-column:1;grid-row:1}
-body .workspace-body .mission-copy{grid-column:2;grid-row:1}
-body .workspace-body .mission>.skill-radar{grid-column:3;grid-row:1/3}
-body .workspace-body .mission-start{grid-column:1/3;grid-row:2;width:100%;min-width:0;align-self:end;margin:0}
+body .workspace-body .mission-art{grid-column:1;grid-row:1;align-self:center}
+body .workspace-body .mission-copy{grid-column:2;grid-row:1;align-self:center}
+body .workspace-body .mission>.skill-radar{grid-column:3;grid-row:1}
+body .workspace-body .mission-start{width:100%;min-width:0;margin:16px 0 0}
 @media(max-width:900px){
   body .workspace-body .mission{grid-template-columns:56px minmax(0,1fr);gap:16px}
   body .workspace-body .mission-art{width:56px;padding:4px}
   body .workspace-body .mission>.skill-radar{grid-column:1/-1;grid-row:2;width:min(100%,320px);justify-self:center}
-  body .workspace-body .mission-start{grid-column:1/-1;grid-row:3}
+  body .workspace-body .mission-copy{align-self:start}
 }
